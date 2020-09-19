@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 
-import PostViewer from './PostViewer';
+import MovieViewer from './MovieViewer';
 
 class App extends Component {
   render() {
     return (
       <main>
-        <PostViewer />
+        <MovieViewer />
       </main>
     );
   }

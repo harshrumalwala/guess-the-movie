@@ -12,7 +12,7 @@ export const GET_MOVIES = gql`
       actresses
       director
       genre
-      releasedDate
+      releaseDate
     }
   }
 `;
@@ -39,7 +39,7 @@ export default () => (
               <td>{movie.actresses}</td>
               <td>{movie.director}</td>
               <td>{movie.genre}</td>
-              <td>{movie.releasedDate}</td>
+              <td>{movie.releaseDate}</td>
             </tr>
           ))}
         </tbody>

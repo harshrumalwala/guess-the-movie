@@ -14,7 +14,7 @@ const MOVIES = [{
     genre: "Action",
     releaseDate: 1335484800,
     actors: "Robert Downey Jr, Chris Evans, Mark Ruffalo, Chris Hemsworth",
-    actress: "Scarlett Johansson"
+    actresses: "Scarlett Johansson"
   },
   {
     name: "Creed",
@@ -22,7 +22,7 @@ const MOVIES = [{
     genre: "Action",
     releaseDate: 1448582400,
     actors: "Michael B. Jordan, Sylvester Stallone",
-    actress: "Tessa Thompson"
+    actresses: "Tessa Thompson"
   },
 ];
 

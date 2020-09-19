@@ -1,44 +1,58 @@
 const express = require('express');
 const cors = require('cors');
-const {graphqlHTTP} = require('express-graphql');
+const {
+  graphqlHTTP
+} = require('express-graphql');
 const gql = require('graphql-tag');
 const {
   buildASTSchema
 } = require('graphql');
 
-const POSTS = [{
-    author: "John Doe",
-    body: "Hello world"
+const MOVIES = [{
+    name: "The Avengers",
+    director: "Joss Whedon",
+    genre: "Action",
+    releaseDate: 1335484800,
+    actors: "Robert Downey Jr, Chris Evans, Mark Ruffalo, Chris Hemsworth",
+    actress: "Scarlett Johansson"
   },
   {
-    author: "Jane Doe",
-    body: "Hi, planet!"
+    name: "Creed",
+    director: "Ryan Coogler",
+    genre: "Action",
+    releaseDate: 1448582400,
+    actors: "Michael B. Jordan, Sylvester Stallone",
+    actress: "Tessa Thompson"
   },
 ];
 
 const schema = buildASTSchema(gql `
   type Query {
-    posts: [Post]
-    post(id: ID!): Post
+    movies: [Movie]
+    movie(id: ID!): Movie
   }
 
-  type Post {
+  type Movie {
     id: ID
-    author: String
-    body: String
+    name: String
+    director: String
+    genre: String
+    actors: String
+    actresses: String
+    releaseDate: Int
   }
 `);
 
-const mapPost = (post, id) => post && ({
+const mapMovie = (movie, id) => movie && ({
   id,
-  ...post
+  ...movie
 });
 
 const root = {
-  posts: () => POSTS.map(mapPost),
-  post: ({
+  movies: () => MOVIES.map(mapMovie),
+  movie: ({
     id
-  }) => mapPost(POSTS[id], id),
+  }) => mapMovie(MOVIES[id], id),
 };
 
 const app = express();

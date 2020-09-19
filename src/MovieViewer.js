@@ -17,6 +17,7 @@ export const GET_MOVIES = gql`
   }
 `;
 
+
 export default () => (
   <Query query={GET_MOVIES}>
     {({ loading, data }) => !loading && (
@@ -39,7 +40,7 @@ export default () => (
               <td>{movie.actresses}</td>
               <td>{movie.director}</td>
               <td>{movie.genre}</td>
-              <td>{movie.releaseDate}</td>
+              <td>{new Date(movie.releaseDate).toLocaleString()}</td>
             </tr>
           ))}
         </tbody>

@@ -3,16 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
+    "@prisma/client": "2.7.1",
     "apollo-boost": "^0.4.9",
     "bootstrap": "^4.5.2",
     "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "express-graphql": "^0.11.0",
-    "graphql": "^15.3.0",
-    "graphql-tag": "^2.11.0",
+    "graphql-yoga": "^1.18.3",
+    "lodash": "^4.17.20",
     "react": "^16.13.1",
     "react-apollo": "^3.1.5",
     "react-dom": "^16.13.1",
@@ -20,7 +16,7 @@
     "reactstrap": "^8.6.0"
   },
   "scripts": {
-    "start": "npm-run-all --parallel watch:server start:web",
+    "start": "concurrently \"npm run watch:server\" \"npm run start:web\"",
     "start:web": "react-scripts start",
     "start:server": "node src/server",
     "watch:server": "nodemon --watch src/server src/server",
@@ -44,7 +40,8 @@
     ]
   },
   "devDependencies": {
-    "nodemon": "^2.0.4",
-    "npm-run-all": "^4.1.5"
+    "@prisma/cli": "^2.7.1",
+    "concurrently": "^5.3.0",
+    "nodemon": "^2.0.4"
   }
 }

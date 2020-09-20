@@ -1,68 +1,82 @@
-const express = require('express');
-const cors = require('cors');
-const {
-  graphqlHTTP
-} = require('express-graphql');
-const gql = require('graphql-tag');
-const {
-  buildASTSchema
-} = require('graphql');
+const { GraphQLServer } = require("graphql-yoga");
+const _ = require("lodash");
+const { PrismaClient } = require("@prisma/client");
 
-const MOVIES = [{
-    name: "The Avengers",
-    director: "Joss Whedon",
-    genre: "Action",
-    releaseDate: 1335484800,
-    actors: "Robert Downey Jr, Chris Evans, Mark Ruffalo, Chris Hemsworth",
-    actress: "Scarlett Johansson"
+const prisma = new PrismaClient();
+
+const resolvers = {
+  Query: {
+    movies: async (parents, args, context) =>
+      await context.prisma.movie.findMany(),
+    movie: async (parent, args, context) =>
+      await context.prisma.movie.findOne({
+        where: {
+          id: args.id,
+        },
+      }),
   },
-  {
-    name: "Creed",
-    director: "Ryan Coogler",
-    genre: "Action",
-    releaseDate: 1448582400,
-    actors: "Michael B. Jordan, Sylvester Stallone",
-    actress: "Tessa Thompson"
+  Mutation: {
+    add: async (parent, args, context) => {
+      const newMovie = await context.prisma.movie.create({
+        data: {
+          name: args.name,
+          director: args.director,
+          genre: args.genre,
+          actors: args.actors,
+          actresses: args.actresses,
+          releaseDate: new Date(args.releaseDate),
+        },
+      });
+      return newMovie;
+    },
+    update: async (parent, args, context) => {
+      const updatedData = _.assign(
+        {},
+        args.name && {
+          name: args.name,
+        },
+        args.director && {
+          director: args.director,
+        },
+        args.genre && {
+          genre: args.genre,
+        },
+        args.actors && {
+          actors: args.actors,
+        },
+        args.actresses && {
+          actresses: args.actresses,
+        },
+        args.releaseDate && {
+          releaseDate: new Date(args.releaseDate),
+        }
+      );
+      console.log(args.releaseDate, new Date(args.releaseDate));
+      const updatedMovie = await context.prisma.movie.update({
+        where: {
+          id: args.id,
+        },
+        data: updatedData,
+      });
+      return updatedMovie;
+    },
+    delete: async (parent, args, context) => {
+      const deletedMovie = await context.prisma.movie.delete({
+        where: {
+          id: args.id,
+        },
+      });
+      return deletedMovie;
+    },
   },
-];
-
-const schema = buildASTSchema(gql `
-  type Query {
-    movies: [Movie]
-    movie(id: ID!): Movie
-  }
-
-  type Movie {
-    id: ID
-    name: String
-    director: String
-    genre: String
-    actors: String
-    actresses: String
-    releaseDate: Int
-  }
-`);
-
-const mapMovie = (movie, id) => movie && ({
-  id,
-  ...movie
-});
-
-const root = {
-  movies: () => MOVIES.map(mapMovie),
-  movie: ({
-    id
-  }) => mapMovie(MOVIES[id], id),
 };
 
-const app = express();
-app.use(cors());
-app.use('/graphql', graphqlHTTP({
-  schema,
-  rootValue: root,
-  graphiql: true,
-}));
+const server = new GraphQLServer({
+  typeDefs: "./src/server/schema.graphql",
+  resolvers,
+  context: {
+    prisma,
+  },
+});
 
-const port = process.env.PORT || 4000
-app.listen(port);
-console.log(`Running a GraphQL API server at localhost:${port}/graphql`);
+server.start(() => console.log("Server is running at http://localhost:4000"));

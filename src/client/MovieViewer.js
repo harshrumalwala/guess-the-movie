@@ -15,7 +15,9 @@ export const GET_MOVIES = gql`
       director {
         name
       }
-      genre
+      genre {
+        name
+      }
       releaseDate
     }
   }
@@ -41,7 +43,7 @@ export default () => (
               <td>{movie.name}</td>
               <td>{_.map(movie.cast, 'name').toString()}</td>
               <td>{movie.director.name}</td>
-              <td>{movie.genre}</td>
+              <td>{movie.genre.name}</td>
               <td>{new Date(movie.releaseDate).toLocaleString()}</td>
             </tr>
           ))}

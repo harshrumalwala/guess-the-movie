@@ -14,7 +14,16 @@ async function add(parent, args, context) {
           }
         }
       },
-      genre: args.genre,
+      genre: {
+        connectOrCreate: {
+          where: {
+            name: args.genre.name
+          },
+          create: {
+            name: args.genre.name
+          }
+        }
+      },
       cast: {
         connectOrCreate: _.map(args.cast, person => ({
           where: {
@@ -29,7 +38,8 @@ async function add(parent, args, context) {
     },
     include: {
       director: true,
-      cast: true
+      cast: true,
+      genre: true,
     }
   });
   return newMovie;
@@ -53,7 +63,16 @@ async function update(parent, args, context) {
       }
     },
     args.genre && {
-      genre: args.genre,
+      genre: {
+        connectOrCreate: {
+          where: {
+            name: args.genre.name
+          },
+          create: {
+            name: args.genre.name
+          }
+        }
+      },
     },
     args.cast && {
       cast: {
@@ -78,7 +97,8 @@ async function update(parent, args, context) {
     data: updatedData,
     include: {
       director: true,
-      cast: true
+      cast: true,
+      genre: true
     }
   });
   return updatedMovie;
@@ -91,7 +111,8 @@ async function remove(parent, args, context) {
     },
     include: {
       director: true,
-      cast: true
+      cast: true,
+      genre: true
     }
   });
   return deletedMovie;

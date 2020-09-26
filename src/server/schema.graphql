@@ -3,15 +3,17 @@ scalar Date
 type Query {
   movies: [Movie!]!
   persons: [Person!]!
+  genres: [Genre!]!
   movie(id: Int!): Movie!
   person(id: Int!): Person!
+  genre(id: Int!): Genre!
 }
 
 type Mutation {
   add(
     name: String!
     director: PersonInput!
-    genre: String!
+    genre: GenreInput!
     cast: [PersonInput!]!
     releaseDate: Date!
   ): Movie!
@@ -19,7 +21,7 @@ type Mutation {
     id: Int!
     name: String
     director: PersonInput
-    genre: String
+    genre: GenreInput
     cast: [PersonInput!]
     releaseDate: Date
   ): Movie
@@ -30,7 +32,7 @@ type Movie {
   id: Int!
   name: String!
   director: Person!
-  genre: String!
+  genre: Genre!
   cast: [Person!]!
   releaseDate: Date!
 }
@@ -40,6 +42,12 @@ type Person {
   name: String!
   acted: [Movie!]
   directed: [Movie!]
+}
+
+type Genre {
+  id: Int!
+  name: String!
+  movies: [Movie!]!
 }
 
 input MovieInput {
@@ -56,4 +64,10 @@ input PersonInput {
   name: String
   acted: [MovieInput]
   directed: [MovieInput]
+}
+
+input GenreInput {
+  id: Int
+  name: String
+  movies: [MovieInput]
 }

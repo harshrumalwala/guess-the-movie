@@ -2,36 +2,72 @@ scalar Date
 
 type Query {
   movies: [Movie!]!
+  persons: [Person!]!
+  genres: [Genre!]!
   movie(id: Int!): Movie!
+  person(id: Int!): Person!
+  genre(id: Int!): Genre!
 }
 
 type Mutation {
   add(
     name: String!
-    director: String!
-    genre: String!
-    actors: String!
-    actresses: String!
+    director: PersonInput!
+    genre: GenreInput!
+    cast: [PersonInput!]!
     releaseDate: Date!
   ): Movie!
   update(
     id: Int!
     name: String
-    director: String
-    genre: String
-    actors: String
-    actresses: String
+    director: PersonInput
+    genre: GenreInput
+    cast: [PersonInput!]
     releaseDate: Date
   ): Movie
-  delete(id: Int!): Movie
+  remove(id: Int!): Movie
 }
 
 type Movie {
   id: Int!
   name: String!
-  director: String!
-  genre: String!
-  actors: String!
-  actresses: String!
+  director: Person!
+  genre: Genre!
+  cast: [Person!]!
   releaseDate: Date!
+}
+
+type Person {
+  id: Int!
+  name: String!
+  acted: [Movie!]
+  directed: [Movie!]
+}
+
+type Genre {
+  id: Int!
+  name: String!
+  movies: [Movie!]!
+}
+
+input MovieInput {
+  id: Int
+  name: String
+  director: PersonInput
+  genre: String
+  cast: [PersonInput]
+  releaseDate: Date
+}
+
+input PersonInput {
+  id: Int
+  name: String
+  acted: [MovieInput]
+  directed: [MovieInput]
+}
+
+input GenreInput {
+  id: Int
+  name: String
+  movies: [MovieInput]
 }

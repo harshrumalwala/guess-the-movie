@@ -1,0 +1,91 @@
+query {
+  # Get all movies
+  movies {
+    id
+    name
+    releaseDate
+    director {
+      name
+    }
+    cast {
+      name
+    }
+    genre {
+      name
+    }
+  }
+  # Get all persons
+  persons {
+    id
+    name
+    acted {
+      name
+    }
+    directed {
+      name
+    }
+  }
+  # Get all genres
+  genres {
+    id
+    name
+    movies {
+      name
+    }
+  }
+}
+
+mutation {
+  # Add a movie
+  add(
+    name: "Serenity"
+    director: { name: "Joss Whedon" }
+    cast: [
+      { name: "Summer Glau" }
+      { name: "Nathan Fillion" }
+      { name: "Morena Baccarin" }
+      { name: "Jewel Staite" }
+      { name: "Gina Torres" }
+      { name: "Alan Tudyk" }
+    ]
+    genre: { name: "Science Fiction" }
+    releaseDate: "2005-08-24 00:00:00"
+  ) {
+    id
+    name
+    cast {
+      name
+    }
+    director {
+      name
+    }
+    releaseDate
+    genre {
+      name
+    }
+  }
+  # Update a movie
+  update(id: 3, cast: [{ name: "Alan Tudyk" }]) {
+    id
+    name
+    cast {
+      name
+    }
+    director {
+      name
+    }
+    genre
+    releaseDate
+  }
+  # Delete a movie
+  remove(id: 3) {
+    id
+    name
+    cast {
+      name
+    }
+    director {
+      name
+    }
+  }
+}

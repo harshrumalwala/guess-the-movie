@@ -1,6 +1,6 @@
 datasource db {
   provider = "sqlite"
-  url      = "file:./dev.db"
+  url = "***"
 }
 
 generator client {
@@ -15,9 +15,8 @@ model Movie {
   directorId  Int
   director    Person   @relation("DirectorMapping", fields: [directorId], references: [id])
   cast        Person[] @relation("CastMapping", references: [id])
+  genre       String
   releaseDate DateTime
-  genre       Genre    @relation("GenreMapping", fields: [genreId], references: [id])
-  genreId     Int
 }
 
 model Person {
@@ -25,10 +24,4 @@ model Person {
   name     String  @unique
   acted    Movie[] @relation("CastMapping")
   directed Movie[] @relation("DirectorMapping")
-}
-
-model Genre {
-  id     Int     @id @default(autoincrement())
-  name   String  @unique
-  movies Movie[] @relation("GenreMapping")
 }

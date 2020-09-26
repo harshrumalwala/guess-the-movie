@@ -4,8 +4,12 @@ import './index.css';
 import MovieViewer from './client/MovieViewer';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import client from './apollo';
-import {ApolloProvider} from 'react-apollo'
+import {ApolloProvider} from '@apollo/react-hooks'
+import ApolloClient from 'apollo-boost';
+
+const client = new ApolloClient({
+  uri: "http://localhost:4000",
+})
 
 ReactDOM.render(
   <React.StrictMode>

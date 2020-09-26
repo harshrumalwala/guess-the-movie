@@ -10,6 +10,7 @@
     "bootstrap": "^4.5.2",
     "concurrently": "^5.3.0",
     "cors": "^2.8.5",
+    "express": "^4.17.1",
     "graphql-yoga": "^1.18.3",
     "lodash": "^4.17.20",
     "node-sass": "^4.14.1",
@@ -20,9 +21,9 @@
     "reactstrap": "^8.6.0"
   },
   "scripts": {
-    "start": "concurrently \"npm run watch:server\" \"npm run start:web\"",
+    "start": "node src/server",
+    "start:dev": "concurrently \"npm run watch:server\" \"npm run start:web\"",
     "start:web": "react-scripts start",
-    "start:server": "node src/server",
     "watch:server": "nodemon --watch src/server src/server",
     "build": "react-scripts build",
     "test": "react-scripts test",

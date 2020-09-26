@@ -1,7 +1,6 @@
 const {
   GraphQLServer
 } = require("graphql-yoga");
-const _ = require("lodash");
 const {
   PrismaClient
 } = require("@prisma/client");

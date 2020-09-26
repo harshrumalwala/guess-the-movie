@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import MovieViewer from './client/MovieViewer';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import client from './apollo';
@@ -10,7 +10,7 @@ import {ApolloProvider} from 'react-apollo'
 ReactDOM.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-      <App />
+      <MovieViewer />
     </ApolloProvider>
   </React.StrictMode>,
   document.getElementById('root')

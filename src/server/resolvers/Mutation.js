@@ -15,12 +15,22 @@ async function add(parent, args, context) {
         }
       },
       genre: {
-        connectOrCreate: {
+        connectOrCreate: _.map(args.genre, g => ({
           where: {
-            name: args.genre.name
+            name: g.name
           },
           create: {
-            name: args.genre.name
+            name: g.name
+          }
+        }))
+      },
+      language: {
+        connectOrCreate: {
+          where: {
+            name: args.language.name
+          },
+          create: {
+            name: args.language.name
           }
         }
       },
@@ -35,11 +45,13 @@ async function add(parent, args, context) {
         }))
       },
       releaseDate: new Date(args.releaseDate),
+      boxOffice: args.boxOffice,
     },
     include: {
       director: true,
       cast: true,
       genre: true,
+      language: true,
     }
   });
   return newMovie;
@@ -62,14 +74,14 @@ async function update(parent, args, context) {
         }
       }
     },
-    args.genre && {
-      genre: {
+    args.language && {
+      language: {
         connectOrCreate: {
           where: {
-            name: args.genre.name
+            name: args.language.name
           },
           create: {
-            name: args.genre.name
+            name: args.language.name
           }
         }
       },
@@ -86,8 +98,23 @@ async function update(parent, args, context) {
         }))
       }
     },
+    args.genre && {
+      genre: {
+        connectOrCreate: _.map(args.genre, g => ({
+          where: {
+            name: g.name
+          },
+          create: {
+            name: g.name
+          }
+        }))
+      }
+    },
     args.releaseDate && {
       releaseDate: new Date(args.releaseDate),
+    },
+    args.boxOffice && {
+      boxOffice: new Date(args.boxOffice),
     }
   );
   const updatedMovie = await context.prisma.movie.update({
@@ -98,7 +125,8 @@ async function update(parent, args, context) {
     include: {
       director: true,
       cast: true,
-      genre: true
+      genre: true,
+      language: true,
     }
   });
   return updatedMovie;
@@ -112,7 +140,8 @@ async function remove(parent, args, context) {
     include: {
       director: true,
       cast: true,
-      genre: true
+      genre: true,
+      language: true,
     }
   });
   return deletedMovie;

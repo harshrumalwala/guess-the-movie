@@ -4,6 +4,7 @@ query {
     id
     name
     releaseDate
+    boxOffice
     director {
       name
     }
@@ -11,6 +12,9 @@ query {
       name
     }
     genre {
+      name
+    }
+    language {
       name
     }
   }
@@ -33,6 +37,14 @@ query {
       name
     }
   }
+  # Get all languages
+  languages {
+    id
+    name
+    movies {
+      name
+    }
+  }
 }
 
 mutation {
@@ -48,8 +60,10 @@ mutation {
       { name: "Gina Torres" }
       { name: "Alan Tudyk" }
     ]
-    genre: { name: "Science Fiction" }
+    genre: [{ name: "Science Fiction" }]
     releaseDate: "2005-08-24 00:00:00"
+    language: { name: "English" }
+    boxOffice: 40400000
   ) {
     id
     name
@@ -60,7 +74,11 @@ mutation {
       name
     }
     releaseDate
+    boxOffice
     genre {
+      name
+    }
+    language {
       name
     }
   }
@@ -74,7 +92,13 @@ mutation {
     director {
       name
     }
-    genre
+    genre {
+      name
+    }
+    language {
+      name
+    }
+    boxOffice
     releaseDate
   }
   # Delete a movie

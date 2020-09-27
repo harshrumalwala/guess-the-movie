@@ -3,7 +3,8 @@ const movies = async (parents, args, context) =>
     include: {
       director: true,
       cast: true,
-      genre: true
+      genre: true,
+      language: true,
     },
   })
 
@@ -16,6 +17,7 @@ const movie = async (parent, args, context) =>
       director: true,
       cast: true,
       genre: true,
+      language: true,
     },
   })
 
@@ -27,40 +29,24 @@ const persons = async (parents, args, context) =>
     },
   })
 
-const person = async (parent, args, context) =>
-  await context.prisma.person.findOne({
-    where: {
-      id: args.id,
-    },
-    include: {
-      acted: true,
-      directed: true,
-    },
-  })
-
-  const genres = async (parents, args, context) =>
+const genres = async (parents, args, context) =>
   await context.prisma.genre.findMany({
     include: {
       movies: true,
     },
   })
 
-const genre = async (parent, args, context) =>
-  await context.prisma.genre.findOne({
-    where: {
-      id: args.id,
-    },
+const languages = async (parents, args, context) =>
+  await context.prisma.language.findMany({
     include: {
       movies: true,
     },
   })
 
-
 module.exports = {
   movies,
   persons,
   genres,
+  languages,
   movie,
-  person,
-  genre
 }

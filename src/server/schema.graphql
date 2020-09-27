@@ -4,37 +4,44 @@ type Query {
   movies: [Movie!]!
   persons: [Person!]!
   genres: [Genre!]!
+  languages: [Language!]!
   movie(id: Int!): Movie!
-  person(id: Int!): Person!
-  genre(id: Int!): Genre!
 }
 
 type Mutation {
   add(
     name: String!
     director: PersonInput!
-    genre: GenreInput!
+    genre: [GenreInput!]!
     cast: [PersonInput!]!
+    boxOffice: Float!
+    language: LanguageInput!
     releaseDate: Date!
   ): Movie!
   update(
     id: Int!
     name: String
     director: PersonInput
-    genre: GenreInput
+    genre: [GenreInput!]!
     cast: [PersonInput!]
+    boxOffice: Float
+    language: LanguageInput
     releaseDate: Date
   ): Movie
   remove(id: Int!): Movie
 }
 
+# Domain Type
+
 type Movie {
   id: Int!
   name: String!
   director: Person!
-  genre: Genre!
+  genre: [Genre!]!
   cast: [Person!]!
   releaseDate: Date!
+  boxOffice: Float
+  language: Language!
 }
 
 type Person {
@@ -50,12 +57,22 @@ type Genre {
   movies: [Movie!]!
 }
 
+type Language {
+  id: Int!
+  name: String!
+  movies: [Movie!]!
+}
+
+#Input Types
+
 input MovieInput {
   id: Int
   name: String
   director: PersonInput
-  genre: String
+  genre: [GenreInput]
   cast: [PersonInput]
+  language: [LanguageInput]
+  boxOffice: Float
   releaseDate: Date
 }
 
@@ -67,6 +84,12 @@ input PersonInput {
 }
 
 input GenreInput {
+  id: Int
+  name: String
+  movies: [MovieInput]
+}
+
+input LanguageInput {
   id: Int
   name: String
   movies: [MovieInput]

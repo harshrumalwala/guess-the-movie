@@ -1,4 +1,8 @@
 const _ = require("lodash");
+const jwt = require('jsonwebtoken');
+const {
+  APP_SECRET
+} = require('../util');
 
 async function add(parent, args, context) {
   const newMovie = await context.prisma.movie.create({
@@ -147,8 +151,27 @@ async function remove(parent, args, context) {
   return deletedMovie;
 }
 
+async function login(parent, args, context) {
+  const user = await context.prisma.user.create({
+    data: {
+      ...args,
+      score: 0
+    }
+  })
+  const token = jwt.sign({
+    userId: user.id
+  }, APP_SECRET)
+
+  return {
+    token,
+    user,
+  }
+}
+
+
 module.exports = {
   add,
   update,
-  remove
+  remove,
+  login
 }

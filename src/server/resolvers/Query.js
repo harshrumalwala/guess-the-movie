@@ -8,6 +8,7 @@ const movies = async (parents, args, context) =>
     },
   })
 
+
 const movie = async (parent, args, context) =>
   await context.prisma.movie.findOne({
     where: {
@@ -43,10 +44,20 @@ const languages = async (parents, args, context) =>
     },
   })
 
+const users = async (parents, args, context) =>
+  await context.prisma.user.findMany({
+    include: {
+      host: true,
+      participant: true,
+      roundCompleted: true,
+    },
+  })
+
 module.exports = {
   movies,
   persons,
   genres,
   languages,
+  users,
   movie,
 }

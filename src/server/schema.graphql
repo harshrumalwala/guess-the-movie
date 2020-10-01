@@ -5,6 +5,7 @@ type Query {
   persons: [Person!]!
   genres: [Genre!]!
   languages: [Language!]!
+  users: [User!]!
   movie(id: Int!): Movie!
 }
 
@@ -22,13 +23,14 @@ type Mutation {
     id: Int!
     name: String
     director: PersonInput
-    genre: [GenreInput!]!
+    genre: [GenreInput!]
     cast: [PersonInput!]
     boxOffice: Float
     language: LanguageInput
     releaseDate: Date
   ): Movie
   remove(id: Int!): Movie
+  login(name: String!): AuthPayload
 }
 
 # Domain Type
@@ -63,6 +65,30 @@ type Language {
   movies: [Movie!]!
 }
 
+type AuthPayload {
+  token: String
+  user: User
+}
+
+type User {
+  id: Int!
+  name: String!
+  score: Int!
+  participant: Room
+  host: Room
+  roundCompleted: Room
+}
+
+type Room {
+  id: ID!
+  players: [User!]!
+  host: User!
+  round: Int!
+  roundLimit: Int!
+  movieId: Int
+  roundCompleted: [User!]
+}
+
 #Input Types
 
 input MovieInput {
@@ -93,4 +119,23 @@ input LanguageInput {
   id: Int
   name: String
   movies: [MovieInput]
+}
+
+input UserInput {
+  id: Int
+  name: String
+  score: Int
+  participant: RoomInput
+  host: RoomInput
+  roundCompleted: RoomInput
+}
+
+input RoomInput {
+  id: ID
+  players: [UserInput]
+  host: UserInput
+  round: Int
+  roundLimit: Int
+  movieId: Int
+  roundCompleted: [UserInput]
 }

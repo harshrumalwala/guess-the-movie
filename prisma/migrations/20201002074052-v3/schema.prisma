@@ -1,6 +1,6 @@
 datasource db {
   provider = "sqlite"
-  url      = "file:./dev.db"
+  url = "***"
 }
 
 generator client {
@@ -20,7 +20,6 @@ model Movie {
   boxOffice   Float
   language    Language @relation("LanguageMapping", fields: [languageId], references: [id])
   languageId  Int
-  rooms       Room[]   @relation("RoomMapping", references: [id])
 }
 
 model Person {
@@ -58,12 +57,11 @@ model User {
 model Room {
   id             String    @id @default(uuid())
   players        User[]    @relation("PlayerMapping")
-  host           User?     @relation("HostMapping")
+  host           User      @relation("HostMapping")
   round          Int
   roundLimit     Int
   roundCompleted User[]
-  roundMovieId   Int?
+  movieId        Int?
   language       Language? @relation(fields: [languageId], references: [id])
   languageId     Int?
-  movies         Movie[]   @relation("RoomMapping")
 }

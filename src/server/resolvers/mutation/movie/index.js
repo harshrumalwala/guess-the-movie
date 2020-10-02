@@ -1,10 +1,9 @@
 const _ = require("lodash");
-const jwt = require('jsonwebtoken');
 const {
-  APP_SECRET
-} = require('../util');
+  includeNestedMovieAttributes,
+} = require('../../../util');
 
-async function add(parent, args, context) {
+const addMovie = async (parent, args, context) => {
   const newMovie = await context.prisma.movie.create({
     data: {
       name: args.name,
@@ -51,17 +50,12 @@ async function add(parent, args, context) {
       releaseDate: new Date(args.releaseDate),
       boxOffice: args.boxOffice,
     },
-    include: {
-      director: true,
-      cast: true,
-      genre: true,
-      language: true,
-    }
+    include: includeNestedMovieAttributes()
   });
   return newMovie;
 }
 
-async function update(parent, args, context) {
+const updateMovie = async (parent, args, context) => {
   const updatedData = _.assign({},
     args.name && {
       name: args.name,
@@ -126,52 +120,23 @@ async function update(parent, args, context) {
       id: args.id,
     },
     data: updatedData,
-    include: {
-      director: true,
-      cast: true,
-      genre: true,
-      language: true,
-    }
+    include: includeNestedMovieAttributes()
   });
   return updatedMovie;
 }
 
-async function remove(parent, args, context) {
+const deleteMovie = async (parent, args, context) => {
   const deletedMovie = await context.prisma.movie.delete({
     where: {
       id: args.id,
     },
-    include: {
-      director: true,
-      cast: true,
-      genre: true,
-      language: true,
-    }
+    include: includeNestedMovieAttributes()
   });
   return deletedMovie;
 }
 
-async function login(parent, args, context) {
-  const user = await context.prisma.user.create({
-    data: {
-      ...args,
-      score: 0
-    }
-  })
-  const token = jwt.sign({
-    userId: user.id
-  }, APP_SECRET)
-
-  return {
-    token,
-    user,
-  }
-}
-
-
 module.exports = {
-  add,
-  update,
-  remove,
-  login
+  addMovie,
+  updateMovie,
+  deleteMovie
 }

@@ -7,7 +7,7 @@ const {
 const path = require("path");
 const express = require("express");
 const Query = require("./resolvers/Query");
-const Mutation = require("./resolvers/Mutation");
+const Mutation = require("./resolvers/mutation");
 const prisma = new PrismaClient();
 
 const resolvers = {

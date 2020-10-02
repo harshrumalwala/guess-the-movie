@@ -1,0 +1,23 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "UpdateField",
+      "model": "Room",
+      "field": "movieId",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Room",
+      "field": "language",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Room",
+      "field": "languageId",
+      "arity": "Optional"
+    }
+  ]
+}

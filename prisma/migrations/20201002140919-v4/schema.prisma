@@ -1,6 +1,6 @@
 datasource db {
   provider = "sqlite"
-  url      = "file:./dev.db"
+  url = "***"
 }
 
 generator client {
@@ -58,7 +58,7 @@ model User {
 model Room {
   id             String    @id @default(uuid())
   players        User[]    @relation("PlayerMapping")
-  host           User?     @relation("HostMapping")
+  host           User      @relation("HostMapping")
   round          Int
   roundLimit     Int
   roundCompleted User[]

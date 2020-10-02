@@ -6,11 +6,12 @@ type Query {
   genres: [Genre!]!
   languages: [Language!]!
   users: [User!]!
+  rooms: [Room!]
   movie(id: Int!): Movie!
 }
 
 type Mutation {
-  add(
+  addMovie(
     name: String!
     director: PersonInput!
     genre: [GenreInput!]!
@@ -19,7 +20,7 @@ type Mutation {
     language: LanguageInput!
     releaseDate: Date!
   ): Movie!
-  update(
+  updateMovie(
     id: Int!
     name: String
     director: PersonInput
@@ -29,8 +30,16 @@ type Mutation {
     language: LanguageInput
     releaseDate: Date
   ): Movie
-  remove(id: Int!): Movie
+  deleteMovie(id: Int!): Movie
   login(name: String!): AuthPayload
+  createRoom(language: LanguageInput, roundLimit: Int!): Room!
+  updateUser(name: String, score: Int): User!
+  updateRoom(
+    id: ID!
+    hasCompletedRound: Boolean
+    isGameReady: Boolean
+    hasPlayerLeft: Boolean
+  ): Room!
 }
 
 # Domain Type
@@ -44,6 +53,7 @@ type Movie {
   releaseDate: Date!
   boxOffice: Float
   language: Language!
+  rooms: [Room!]
 }
 
 type Person {
@@ -63,6 +73,7 @@ type Language {
   id: Int!
   name: String!
   movies: [Movie!]!
+  rooms: [Room!]
 }
 
 type AuthPayload {
@@ -82,11 +93,13 @@ type User {
 type Room {
   id: ID!
   players: [User!]!
-  host: User!
+  host: User
   round: Int!
   roundLimit: Int!
-  movieId: Int
+  roundMovieId: Int
   roundCompleted: [User!]
+  language: Language
+  movies: [Movie!]
 }
 
 #Input Types
@@ -100,6 +113,7 @@ input MovieInput {
   language: [LanguageInput]
   boxOffice: Float
   releaseDate: Date
+  rooms: [RoomInput]
 }
 
 input PersonInput {
@@ -119,6 +133,7 @@ input LanguageInput {
   id: Int
   name: String
   movies: [MovieInput]
+  rooms: [RoomInput]
 }
 
 input UserInput {
@@ -138,4 +153,6 @@ input RoomInput {
   roundLimit: Int
   movieId: Int
   roundCompleted: [UserInput]
+  language: LanguageInput
+  movies: [MovieInput]
 }

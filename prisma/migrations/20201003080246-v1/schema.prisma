@@ -1,0 +1,71 @@
+datasource db {
+  provider = "sqlite"
+  url = "***"
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["connectOrCreate"]
+}
+
+model Movie {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  name        String   @unique
+  directorId  Int
+  director    Person   @relation("DirectorMapping", fields: [directorId], references: [id])
+  cast        Person[] @relation("CastMapping", references: [id])
+  releaseDate DateTime
+  genre       Genre[]  @relation("GenreMapping", references: [id])
+  boxOffice   Float
+  language    Language @relation("LanguageMapping", fields: [languageId], references: [id])
+  languageId  Int
+  rooms       Room[]   @relation("RoomMapping", references: [id])
+}
+
+model Person {
+  id       Int     @id @default(autoincrement())
+  name     String  @unique
+  acted    Movie[] @relation("CastMapping")
+  directed Movie[] @relation("DirectorMapping")
+}
+
+model Genre {
+  id     Int     @id @default(autoincrement())
+  name   String  @unique
+  movies Movie[] @relation("GenreMapping")
+}
+
+model Language {
+  id     Int     @id @default(autoincrement())
+  name   String  @unique
+  movies Movie[] @relation("LanguageMapping")
+  rooms  Room[]
+}
+
+model User {
+  id             Int      @id @default(autoincrement())
+  createdAt      DateTime @default(now())
+  name           String
+  score          Int
+  participant    Room?    @relation("PlayerMapping", fields: [participantId], references: [id])
+  participantId  String?
+  host           Room?    @relation("HostMapping", fields: [hostId], references: [id])
+  hostId         String?
+  roundCompleted Room?    @relation(fields: [roomId], references: [id])
+  roomId         String?
+}
+
+model Room {
+  id             String    @id @default(uuid())
+  createdAt      DateTime  @default(now())
+  players        User[]    @relation("PlayerMapping")
+  host           User?     @relation("HostMapping")
+  round          Int
+  roundLimit     Int
+  roundCompleted User[]
+  roundMovieId   Int?
+  language       Language? @relation(fields: [languageId], references: [id])
+  languageId     Int?
+  movies         Movie[]   @relation("RoomMapping")
+}

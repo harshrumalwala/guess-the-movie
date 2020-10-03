@@ -44,19 +44,21 @@ model Language {
 }
 
 model User {
-  id             Int     @id @default(autoincrement())
+  id             Int      @id @default(autoincrement())
+  createdAt      DateTime @default(now())
   name           String
   score          Int
-  participant    Room?   @relation("PlayerMapping", fields: [participantId], references: [id])
+  participant    Room?    @relation("PlayerMapping", fields: [participantId], references: [id])
   participantId  String?
-  host           Room?   @relation("HostMapping", fields: [hostId], references: [id])
+  host           Room?    @relation("HostMapping", fields: [hostId], references: [id])
   hostId         String?
-  roundCompleted Room?   @relation(fields: [roomId], references: [id])
+  roundCompleted Room?    @relation(fields: [roomId], references: [id])
   roomId         String?
 }
 
 model Room {
   id             String    @id @default(uuid())
+  createdAt      DateTime  @default(now())
   players        User[]    @relation("PlayerMapping")
   host           User?     @relation("HostMapping")
   round          Int

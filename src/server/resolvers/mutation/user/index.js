@@ -38,7 +38,18 @@ const updateUser = async (parent, args, context) => {
   });
 }
 
+const deleteUser = async (parent, args, context) => {
+  const deletedUser = await context.prisma.user.delete({
+    where: {
+      id: args.id,
+    },
+    include: includeNestedUserAttributes()
+  });
+  return deletedUser;
+}
+
 module.exports = {
   login,
-  updateUser
+  updateUser,
+  deleteUser
 }

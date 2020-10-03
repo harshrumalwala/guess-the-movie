@@ -20,6 +20,8 @@ type Mutation {
     language: LanguageInput!
     releaseDate: Date!
   ): Movie!
+  login(name: String!): AuthPayload
+  createRoom(language: LanguageInput, roundLimit: Int!): Room!
   updateMovie(
     id: Int!
     name: String
@@ -30,16 +32,17 @@ type Mutation {
     language: LanguageInput
     releaseDate: Date
   ): Movie
-  deleteMovie(id: Int!): Movie
-  login(name: String!): AuthPayload
-  createRoom(language: LanguageInput, roundLimit: Int!): Room!
   updateUser(name: String, score: Int): User!
   updateRoom(
     id: ID!
-    hasCompletedRound: Boolean
     isGameReady: Boolean
+    isGameRestarted: Boolean
+    hasCompletedRound: Boolean
     hasPlayerLeft: Boolean
   ): Room!
+  deleteMovie(id: Int!): Movie
+  deleteUser(id: Int!): User
+  deleteRoom(id: ID!): Room
 }
 
 # Domain Type

@@ -6,12 +6,14 @@ const {
 
 const {
   login,
-  updateUser
+  updateUser,
+  deleteUser
 } = require('./user')
 
 const {
   createRoom,
-  updateRoom
+  updateRoom,
+  deleteRoom
 } = require('./room')
 
 module.exports = {
@@ -20,6 +22,8 @@ module.exports = {
   deleteMovie,
   login,
   updateUser,
+  deleteUser,
   createRoom,
-  updateRoom
+  updateRoom,
+  deleteRoom
 }

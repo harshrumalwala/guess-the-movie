@@ -1,12 +1,15 @@
 const _ = require("lodash");
 const {
   getUserId,
-  isPlayerNew,
-  hasPlayerCompletedRound,
-  updateRoomOnNewRound,
-  updateRoomOnPlayerExit,
   includeNestedRoomAttributes,
 } = require('../../../util');
+const {
+  updateRoomOnNewRound,
+  updateRoomOnPlayerExit,
+  updateRoomOnGameRestart,
+  updateRoomOnPlayerJoin,
+  updateRoomOnPlayerRoundComplete,
+} = require('./util');
 
 const createRoom = async (parent, args, context) => {
   const userId = getUserId(context);
@@ -38,7 +41,6 @@ const createRoom = async (parent, args, context) => {
   });
 }
 
-
 const updateRoom = async (parent, args, context) => {
   const userId = getUserId(context);
   const room = await context.prisma.room.findOne({
@@ -54,21 +56,10 @@ const updateRoom = async (parent, args, context) => {
   });
 
   const preEnrichedData = _.assign({},
-    isPlayerNew(userId, room) && {
-      players: {
-        connect: {
-          id: userId
-        }
-      }
-    },
-    hasPlayerCompletedRound(args.hasCompletedRound, userId, room) && {
-      roundCompleted: {
-        connect: {
-          id: userId
-        }
-      }
-    },
-    updateRoomOnPlayerExit(room, userId, args.hasPlayerLeft)
+    updateRoomOnPlayerJoin(room, userId),
+    updateRoomOnPlayerRoundComplete(room, userId, args.hasCompletedRound),
+    updateRoomOnPlayerExit(room, userId, args.hasPlayerLeft),
+    updateRoomOnGameRestart(room, movies, args.isGameRestarted)
   )
 
   let updatedRoomData;
@@ -93,7 +84,18 @@ const updateRoom = async (parent, args, context) => {
   return updatedRoomData;
 }
 
+const deleteRoom = async (parent, args, context) => {
+  const deleteRoom = await context.prisma.room.delete({
+    where: {
+      id: args.id,
+    },
+    include: includeNestedRoomAttributes()
+  });
+  return deleteRoom;
+}
+
 module.exports = {
   createRoom,
-  updateRoom
+  updateRoom,
+  deleteRoom
 }

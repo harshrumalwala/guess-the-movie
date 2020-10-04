@@ -1,5 +1,6 @@
 const {
-  GraphQLServer
+  GraphQLServer,
+  PubSub
 } = require("graphql-yoga");
 const {
   PrismaClient
@@ -7,12 +8,16 @@ const {
 const path = require("path");
 const express = require("express");
 const Query = require("./resolvers/Query");
+const Subscription = require("./resolvers/Subscription");
 const Mutation = require("./resolvers/mutation");
+
 const prisma = new PrismaClient();
+const pubsub = new PubSub();
 
 const resolvers = {
   Query,
   Mutation,
+  Subscription
 };
 
 const PORT = process.env.PORT || 5000;
@@ -29,7 +34,8 @@ const server = new GraphQLServer({
   context: request => {
     return {
       ...request,
-      prisma
+      prisma,
+      pubsub
     }
   },
 });

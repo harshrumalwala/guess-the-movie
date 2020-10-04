@@ -26,8 +26,6 @@ const login = async (parent, args, context) => {
 const updateUser = async (parent, args, context) => {
   const enrichedData = _.assign({}, args.name && {
     name: args.name
-  }, args.score && {
-    score: args.score
   });
   return await context.prisma.user.update({
     where: {

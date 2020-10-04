@@ -9,6 +9,7 @@ const {
   updateRoomOnGameRestart,
   updateRoomOnPlayerJoin,
   updateRoomOnPlayerRoundComplete,
+  updatePlayerNameOrScore
 } = require('./util');
 
 const createRoom = async (parent, args, context) => {
@@ -56,6 +57,7 @@ const updateRoom = async (parent, args, context) => {
   });
 
   const preEnrichedData = _.assign({},
+    updatePlayerNameOrScore(userId, args.score, args.name),
     updateRoomOnPlayerJoin(room, userId),
     updateRoomOnPlayerRoundComplete(room, userId, args.hasCompletedRound),
     updateRoomOnPlayerExit(room, userId, args.hasPlayerLeft),
@@ -80,6 +82,8 @@ const updateRoom = async (parent, args, context) => {
     data: updateRoomOnNewRound(updatedRoomData ?? room, movies, args.isGameReady),
     include: includeNestedRoomAttributes()
   })
+
+  context.pubsub.publish(args.id, updatedRoomData);
 
   return updatedRoomData;
 }

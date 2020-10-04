@@ -32,9 +32,11 @@ type Mutation {
     language: LanguageInput
     releaseDate: Date
   ): Movie
-  updateUser(name: String, score: Int): User!
+  updateUser(name: String): User!
   updateRoom(
     id: ID!
+    name: String
+    score: Int
     isGameReady: Boolean
     isGameRestarted: Boolean
     hasCompletedRound: Boolean
@@ -43,6 +45,12 @@ type Mutation {
   deleteMovie(id: Int!): Movie
   deleteUser(id: Int!): User
   deleteRoom(id: ID!): Room
+}
+
+type Subscription {
+  watchRoom(
+    id: ID!
+  ): Room
 }
 
 # Domain Type

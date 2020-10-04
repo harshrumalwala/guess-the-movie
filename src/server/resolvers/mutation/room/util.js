@@ -42,6 +42,14 @@ const updateRoomOnPlayerExit = (room, userId, hasPlayerLeft) => {
   if (hasPlayerLeft) {
     return _.assign({
       players: {
+        update: [{
+          data: {
+            score: 0,
+          },
+          where: {
+            id: userId
+          }
+        }],
         disconnect: {
           id: userId
         }
@@ -67,6 +75,16 @@ const updateRoomOnGameRestart = (room, movies, isGameRestarted) => {
         round: 0,
         roundLimit: room.roundLimit,
         roundMovieId: null,
+        players: {
+          update: _.map(room.players, player => ({
+            data: {
+              score: 0
+            },
+            where: {
+              id: player.id
+            }
+          }))
+        }
       }, !_.isEmpty(room.movies) && {
         movies: {
           disconnect: _.map(room.movies, movie => ({
@@ -102,6 +120,21 @@ const updateRoomOnPlayerRoundComplete = (room, userId, hasCompletedRound) =>
     }
   }
 
+const updatePlayerNameOrScore = (userId, score, name) => ((score || name) && {
+  players: {
+    update: [{
+      data: _.assign({}, score && {
+        score: score
+      }, name && {
+        name: name
+      }),
+      where: {
+        id: userId
+      }
+    }]
+  }
+})
+
 module.exports = {
   isPlayerNew,
   hasPlayerCompletedRound,
@@ -112,4 +145,5 @@ module.exports = {
   updateRoomOnGameRestart,
   updateRoomOnPlayerJoin,
   updateRoomOnPlayerRoundComplete,
+  updatePlayerNameOrScore
 }

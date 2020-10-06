@@ -1,11 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import MovieViewer from "./client/MovieViewer";
 import * as serviceWorker from "./serviceWorker";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ApolloProvider } from "@apollo/react-hooks";
 import ApolloClient from "apollo-boost";
+import { CurrentUserProvider } from "client/hooks";
+import Routes from "client/routes";
+import { BrowserRouter } from "react-router-dom";
 
 const client = new ApolloClient(
   process.env.NODE_ENV !== "production" && {
@@ -15,9 +17,13 @@ const client = new ApolloClient(
 
 ReactDOM.render(
   <React.StrictMode>
-    <ApolloProvider client={client}>
-      <MovieViewer />
-    </ApolloProvider>
+    <BrowserRouter>
+      <ApolloProvider client={client}>
+        <CurrentUserProvider>
+          <Routes />
+        </CurrentUserProvider>
+      </ApolloProvider>
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById("root")
 );

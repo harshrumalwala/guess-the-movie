@@ -8,6 +8,7 @@ import ApolloClient from "apollo-boost";
 import { CurrentUserProvider } from "client/hooks";
 import Routes from "client/routes";
 import { BrowserRouter } from "react-router-dom";
+import { AppHeader } from "client/components";
 
 const client = new ApolloClient(
   process.env.NODE_ENV !== "production" && {
@@ -20,6 +21,7 @@ ReactDOM.render(
     <BrowserRouter>
       <ApolloProvider client={client}>
         <CurrentUserProvider>
+          <AppHeader />
           <Routes />
         </CurrentUserProvider>
       </ApolloProvider>

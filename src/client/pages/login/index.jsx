@@ -49,6 +49,7 @@ const Login = () => {
   useEffect(() => {
     if (data) {
       setToken(data.login.token);
+      localStorage.setItem('token', data.login.token);
       history.push("/");
     }
   }, [data, setToken, history]);

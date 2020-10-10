@@ -10,6 +10,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import { useCurrentUser } from "client/hooks";
 import { useHistory } from "react-router-dom";
+import { useApolloClient } from "@apollo/client";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,6 +30,7 @@ const AppHeader = () => {
   const { token, setToken } = useCurrentUser();
   const [anchorEl, setAnchorEl] = useState(null);
   const history = useHistory();
+  const client = useApolloClient();
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -46,6 +48,8 @@ const AppHeader = () => {
   const handleLogout = () => {
     setAnchorEl(null);
     setToken(null);
+    client.resetStore();
+    localStorage.clear();
     redirectToHome();
   };
 

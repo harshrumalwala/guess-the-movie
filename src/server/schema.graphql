@@ -4,37 +4,67 @@ type Query {
   movies: [Movie!]!
   persons: [Person!]!
   genres: [Genre!]!
+  languages: [Language!]!
+  users: [User!]!
+  rooms: [Room!]
   movie(id: Int!): Movie!
-  person(id: Int!): Person!
-  genre(id: Int!): Genre!
 }
 
 type Mutation {
-  add(
+  addMovie(
     name: String!
     director: PersonInput!
-    genre: GenreInput!
+    genre: [GenreInput!]!
     cast: [PersonInput!]!
+    boxOffice: Float!
+    language: LanguageInput!
     releaseDate: Date!
   ): Movie!
-  update(
+  login(name: String!): AuthPayload
+  createRoom(language: LanguageInput, roundLimit: Int!): Room!
+  updateMovie(
     id: Int!
     name: String
     director: PersonInput
-    genre: GenreInput
+    genre: [GenreInput!]
     cast: [PersonInput!]
+    boxOffice: Float
+    language: LanguageInput
     releaseDate: Date
   ): Movie
-  remove(id: Int!): Movie
+  updateUser(name: String): User!
+  updateRoom(
+    id: ID!
+    name: String
+    score: Int
+    isGameReady: Boolean
+    isGameRestarted: Boolean
+    hasCompletedRound: Boolean
+    hasPlayerLeft: Boolean
+  ): Room!
+  deleteMovie(id: Int!): Movie
+  deleteUser(id: Int!): User
+  deleteRoom(id: ID!): Room
 }
+
+type Subscription {
+  watchRoom(
+    id: ID!
+  ): Room
+}
+
+# Domain Type
 
 type Movie {
   id: Int!
   name: String!
   director: Person!
-  genre: Genre!
+  genre: [Genre!]!
   cast: [Person!]!
   releaseDate: Date!
+  boxOffice: Float
+  language: Language!
+  rooms: [Room!]
 }
 
 type Person {
@@ -50,13 +80,51 @@ type Genre {
   movies: [Movie!]!
 }
 
+type Language {
+  id: Int!
+  name: String!
+  movies: [Movie!]!
+  rooms: [Room!]
+}
+
+type AuthPayload {
+  token: String
+  user: User
+}
+
+type User {
+  id: Int!
+  name: String!
+  score: Int!
+  participant: Room
+  host: Room
+  roundCompleted: Room
+}
+
+type Room {
+  id: ID!
+  players: [User!]!
+  host: User
+  round: Int!
+  roundLimit: Int!
+  roundMovieId: Int
+  roundCompleted: [User!]
+  language: Language
+  movies: [Movie!]
+}
+
+#Input Types
+
 input MovieInput {
   id: Int
   name: String
   director: PersonInput
-  genre: String
+  genre: [GenreInput]
   cast: [PersonInput]
+  language: [LanguageInput]
+  boxOffice: Float
   releaseDate: Date
+  rooms: [RoomInput]
 }
 
 input PersonInput {
@@ -69,5 +137,33 @@ input PersonInput {
 input GenreInput {
   id: Int
   name: String
+  movies: [MovieInput]
+}
+
+input LanguageInput {
+  id: Int
+  name: String
+  movies: [MovieInput]
+  rooms: [RoomInput]
+}
+
+input UserInput {
+  id: Int
+  name: String
+  score: Int
+  participant: RoomInput
+  host: RoomInput
+  roundCompleted: RoomInput
+}
+
+input RoomInput {
+  id: ID
+  players: [UserInput]
+  host: UserInput
+  round: Int
+  roundLimit: Int
+  movieId: Int
+  roundCompleted: [UserInput]
+  language: LanguageInput
   movies: [MovieInput]
 }

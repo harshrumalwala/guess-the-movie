@@ -7,7 +7,12 @@ type Query {
   languages: [Language!]!
   users: [User!]!
   rooms: [Room!]
-  movie(id: Int!): Movie!
+  isPersonInCast(id: Int!, person: String!): Boolean!
+  isDirectedBy(id: Int!, person: String!): Boolean!
+  isBoxOfficeCollectionGreaterThan(id: Int!, boxOffice: Float!): Boolean!
+  isReleasedAfter(id: Int!, releaseDate: Date!): Boolean!
+  isGenre(id: Int!, genre: String!): Boolean!
+  isPrimaryLanguage(id: Int!, language: String!): Boolean!
 }
 
 type Mutation {
@@ -21,7 +26,7 @@ type Mutation {
     releaseDate: Date!
   ): Movie!
   login(name: String!): AuthPayload
-  createRoom(language: LanguageInput, roundLimit: Int!): Room!
+  createRoom(languages: [LanguageInput], roundLimit: Int!): Room!
   updateMovie(
     id: Int!
     name: String
@@ -48,9 +53,7 @@ type Mutation {
 }
 
 type Subscription {
-  watchRoom(
-    id: ID!
-  ): Room
+  watchRoom(id: ID!): Room
 }
 
 # Domain Type
@@ -62,7 +65,7 @@ type Movie {
   genre: [Genre!]!
   cast: [Person!]!
   releaseDate: Date!
-  boxOffice: Float
+  boxOffice: Float!
   language: Language!
   rooms: [Room!]
 }
@@ -109,7 +112,8 @@ type Room {
   roundLimit: Int!
   roundMovieId: Int
   roundCompleted: [User!]
-  language: Language
+  roundStartedAt: Date
+  languages: [Language]
   movies: [Movie!]
 }
 
@@ -164,6 +168,7 @@ input RoomInput {
   roundLimit: Int
   movieId: Int
   roundCompleted: [UserInput]
-  language: LanguageInput
+  roundStartedAt: Date
+  languages: [LanguageInput]
   movies: [MovieInput]
 }

@@ -1,0 +1,72 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Language",
+          "field": "rooms"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Language",
+          "field": "rooms"
+        },
+        "directive": "relation"
+      },
+      "argument": "",
+      "value": "\"RoomLanguageMapping\""
+    },
+    {
+      "tag": "CreateField",
+      "model": "Room",
+      "field": "languages",
+      "type": "Language",
+      "arity": "List"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Room",
+          "field": "languages"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Room",
+          "field": "languages"
+        },
+        "directive": "relation"
+      },
+      "argument": "",
+      "value": "\"RoomLanguageMapping\""
+    },
+    {
+      "tag": "DeleteField",
+      "model": "Room",
+      "field": "language"
+    },
+    {
+      "tag": "DeleteField",
+      "model": "Room",
+      "field": "languageId"
+    }
+  ]
+}

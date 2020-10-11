@@ -22,6 +22,7 @@ const updateRoomOnNewRound = (room, movies, isGameReady) => {
     return _.assign({}, {
       round: room.round + 1,
       roundMovieId: newMovie.id,
+      roundStartedAt: (new Date()).toISOString(),
       movies: {
         connect: {
           id: newMovie.id

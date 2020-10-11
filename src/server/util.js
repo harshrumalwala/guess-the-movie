@@ -18,7 +18,7 @@ const retrieveUserToken = (authorization) =>
   _.chain(authorization).replace('Bearer', '').trim().value();
 
 const includeNestedRoomAttributes = () => ({
-  language: true,
+  languages: true,
   host: true,
   players: true,
   roundCompleted: true,

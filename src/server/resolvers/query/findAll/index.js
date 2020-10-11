@@ -2,19 +2,10 @@ const {
   includeNestedMovieAttributes,
   includeNestedRoomAttributes,
   includeNestedUserAttributes
-} = require('../util')
+} = require('../../../util')
 
 const movies = async (parents, args, context) =>
   await context.prisma.movie.findMany({
-    include: includeNestedMovieAttributes(),
-  })
-
-
-const movie = async (parent, args, context) =>
-  await context.prisma.movie.findOne({
-    where: {
-      id: args.id,
-    },
     include: includeNestedMovieAttributes(),
   })
 
@@ -57,5 +48,4 @@ module.exports = {
   languages,
   users,
   rooms,
-  movie,
 }

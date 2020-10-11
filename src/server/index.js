@@ -7,7 +7,7 @@ const {
 } = require("@prisma/client");
 const path = require("path");
 const express = require("express");
-const Query = require("./resolvers/Query");
+const Query = require("./resolvers/query");
 const Subscription = require("./resolvers/Subscription");
 const Mutation = require("./resolvers/mutation");
 

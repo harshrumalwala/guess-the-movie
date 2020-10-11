@@ -28,13 +28,16 @@ const createRoom = async (parent, args, context) => {
         }
       }
     },
-    args.language && {
-      language: {
-        connect: {
-          name: args.language.name
-        }
+    args.languages && {
+      languages: {
+        connect: _.map(args.languages, l => ({
+          name: l.name
+        }))
+
       }
     })
+
+  console.log(enrichedData);
 
   return await context.prisma.room.create({
     data: enrichedData,
@@ -50,9 +53,13 @@ const updateRoom = async (parent, args, context) => {
     },
     include: includeNestedRoomAttributes()
   });
-  const movies = await context.prisma.movie.findMany(room.languageId && {
+  const movies = await context.prisma.movie.findMany(_.size(room.languages) > 0 && {
     where: {
-      languageId: room.languageId,
+      language: {
+        name: {
+          in: _.map(room.languages, 'name')
+        }
+      }
     },
   });
 

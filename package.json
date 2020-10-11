@@ -2,6 +2,9 @@
   "name": "guess-the-movie",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "14.x"
+  },
   "dependencies": {
     "@apollo/client": "^3.2.2",
     "@apollo/react-hooks": "^4.0.0",

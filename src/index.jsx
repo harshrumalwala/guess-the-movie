@@ -11,19 +11,18 @@ import { AppHeader } from "client/components";
 import { WebSocketLink } from "@apollo/client/link/ws";
 import { split, HttpLink, ApolloClient, InMemoryCache } from "@apollo/client";
 import { getMainDefinition } from "@apollo/client/utilities";
-import { setContext } from '@apollo/client/link/context';
 
 const token = localStorage.getItem("token");
 
 const httpLink = new HttpLink({
-  uri: "http://localhost:5000/graphql",
-  // headers: {
-  //   Authorization: `Bearer ${token ? token : ""}`,
-  // },
+  uri: process.env.NODE_ENV !== "production" ? "http://localhost:5000/graphql" : "/graphql",
+  headers: {
+    Authorization: `Bearer ${token ? token : ""}`,
+  },
 });
 
 const wsLink = new WebSocketLink({
-  uri: "ws://localhost:5000/subscriptions",
+  uri: process.env.NODE_ENV !== "production" ? "ws://localhost:5000/subscriptions" : "/subscriptions",
   options: {
     reconnect: true,
     connectionParams: {
@@ -33,19 +32,6 @@ const wsLink = new WebSocketLink({
     },
   },
 });
-
-const authLink = setContext((_, { headers }) => {
-  // get the authentication token from local storage if it exists
-  const token = localStorage.getItem('token');
-  // return the headers to the context so httpLink can read them
-  return {
-    headers: {
-      ...headers,
-      authorization: token ? `Bearer ${token}` : "",
-    }
-  }
-});
-
 
 // The split function takes three parameters:
 //
@@ -61,7 +47,7 @@ const link = split(
     );
   },
   wsLink,
-  authLink.concat(httpLink)
+  httpLink
 );
 
 const client = new ApolloClient({

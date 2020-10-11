@@ -79,7 +79,7 @@ const updateRoom = async (parent, args, context) => {
     where: {
       id: args.id,
     },
-    data: updateRoomOnNewRound(updatedRoomData ?? room, movies, args.isGameReady),
+    data: updateRoomOnNewRound(updatedRoomData ? updatedRoomData : room, movies, args.isGameReady),
     include: includeNestedRoomAttributes()
   })
 

@@ -26,7 +26,7 @@ const options = {
   port: PORT,
   endpoint: "/graphql",
   playground: "/playground",
-  subscriptions: "/subscriptions",
+  subscriptions: "/graphql",
 };
 const server = new GraphQLServer({
   typeDefs: "./src/server/schema.graphql",
@@ -47,6 +47,6 @@ if (server.express.get("env") === "production") {
 
 server.start(options, () => {
   console.log(
-    `Server is running at  http://localhost:${options.port}${options.endpoint}`
+    `Server is running on port - ${options.port}`
   );
 });

@@ -13,16 +13,23 @@ import { split, HttpLink, ApolloClient, InMemoryCache } from "@apollo/client";
 import { getMainDefinition } from "@apollo/client/utilities";
 
 const token = localStorage.getItem("token");
+const isHttps = () => window.location.protocol.includes("s");
 
 const httpLink = new HttpLink({
-  uri: process.env.NODE_ENV !== "production" ? "http://localhost:5000/graphql" : "/graphql",
+  uri:
+    process.env.NODE_ENV !== "production"
+      ? "http://localhost:5000/graphql"
+      : "/graphql",
   headers: {
     Authorization: `Bearer ${token ? token : ""}`,
   },
 });
 
 const wsLink = new WebSocketLink({
-  uri: process.env.NODE_ENV !== "production" ? "ws://localhost:5000/subscriptions" : "/subscriptions",
+  uri:
+    process.env.NODE_ENV !== "production"
+      ? "ws://localhost:5000/subscriptions"
+      : `${isHttps() ? "wss" : "ws"}://${window.location.host}/subscriptions`,
   options: {
     reconnect: true,
     connectionParams: {

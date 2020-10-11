@@ -16,7 +16,8 @@ const pubsub = new PubSub();
 
 const resolvers = {
   Query,
-  Mutation
+  Mutation,
+  Subscription
 };
 
 const PORT = process.env.PORT || 5000;

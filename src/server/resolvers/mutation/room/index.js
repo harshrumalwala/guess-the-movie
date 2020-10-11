@@ -37,8 +37,6 @@ const createRoom = async (parent, args, context) => {
       }
     })
 
-  console.log(enrichedData);
-
   return await context.prisma.room.create({
     data: enrichedData,
     include: includeNestedRoomAttributes()

@@ -1,7 +1,6 @@
 const _ = require('lodash');
 
 const isPersonInCast = async (parents, args, context) => {
-
   const movies = await context.prisma.movie.findMany({
     where: {
       AND: [{
@@ -22,7 +21,6 @@ const isPersonInCast = async (parents, args, context) => {
 }
 
 const isDirectedBy = async (parents, args, context) => {
-
   const movies = await context.prisma.movie.findMany({
     where: {
       AND: [{
@@ -41,7 +39,6 @@ const isDirectedBy = async (parents, args, context) => {
 }
 
 const isBoxOfficeCollectionGreaterThan = async (parents, args, context) => {
-
   const movies = await context.prisma.movie.findMany({
     where: {
       AND: [{
@@ -54,12 +51,10 @@ const isBoxOfficeCollectionGreaterThan = async (parents, args, context) => {
       }],
     },
   })
-
   return _.size(movies) > 0;
 }
 
 const isReleasedAfter = async (parents, args, context) => {
-  console.log(args.releaseDate);
   const movies = await context.prisma.movie.findMany({
     where: {
       AND: [{
@@ -72,12 +67,10 @@ const isReleasedAfter = async (parents, args, context) => {
       }],
     },
   })
-
   return _.size(movies) > 0;
 }
 
 const isGenre = async (parents, args, context) => {
-
   const movies = await context.prisma.movie.findMany({
     where: {
       AND: [{
@@ -98,7 +91,6 @@ const isGenre = async (parents, args, context) => {
 }
 
 const isPrimaryLanguage = async (parents, args, context) => {
-
   const movies = await context.prisma.movie.findMany({
     where: {
       AND: [{

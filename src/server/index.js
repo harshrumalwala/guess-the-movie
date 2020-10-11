@@ -16,8 +16,7 @@ const pubsub = new PubSub();
 
 const resolvers = {
   Query,
-  Mutation,
-  Subscription
+  Mutation
 };
 
 const PORT = process.env.PORT || 5000;
@@ -26,7 +25,7 @@ const options = {
   port: PORT,
   endpoint: "/graphql",
   playground: "/playground",
-  subscriptions: "/graphql",
+  subscriptions: "/subscriptions",
 };
 const server = new GraphQLServer({
   typeDefs: "./src/server/schema.graphql",
@@ -40,10 +39,10 @@ const server = new GraphQLServer({
   },
 });
 
-if (server.express.get("env") === "production") {
+// if (server.express.get("env") === "production") {
   const buildPath = path.join(__dirname, "../../build");
   server.express.use(express.static(buildPath));
-}
+// }
 
 server.start(options, () => {
   console.log(

@@ -28,8 +28,8 @@ const httpLink = new HttpLink({
 const wsLink = new WebSocketLink({
   uri:
     process.env.NODE_ENV !== "production"
-      ? "ws://localhost:5000/graphql"
-      : `${isHttps() ? "wss" : "ws"}://${window.location.host}/graphql`,
+      ? "ws://localhost:5000/subscriptions"
+      : `${isHttps() ? "wss" : "ws"}://${window.location.host}/subscriptions`,
   options: {
     reconnect: true,
     connectionParams: {

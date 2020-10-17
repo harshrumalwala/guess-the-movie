@@ -10,7 +10,8 @@ import TableRow from '@material-ui/core/TableRow';
 
 const useStyles = makeStyles({
   table: {
-    width: '18%'
+    width: '18%',
+    minWidth: '275px'
   }
 });
 

@@ -21,6 +21,7 @@ const ROOM_SUBSCRIPTION = gql`
       host {
         id
       }
+      roundStartedAt
     }
   }
 `;

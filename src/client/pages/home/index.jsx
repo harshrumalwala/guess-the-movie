@@ -1,22 +1,22 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Typography from "@material-ui/core/Typography";
-import Container from "@material-ui/core/Container";
-import { useCurrentUser } from "client/hooks";
-import { Button } from "@material-ui/core";
-import { useHistory } from "react-router-dom";
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Typography from '@material-ui/core/Typography';
+import Container from '@material-ui/core/Container';
+import { useCurrentUser } from 'client/hooks';
+import { Button } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   container: {
     marginTop: theme.spacing(4),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
   },
   joinRoom: {
-    margin: theme.spacing(3, 0, 2),
-  },
+    margin: theme.spacing(3, 0, 2)
+  }
 }));
 
 const Home = () => {
@@ -25,7 +25,7 @@ const Home = () => {
   const history = useHistory();
 
   const handleJoinRoom = () => {
-    history.push("/room/fae12de7-11e5-4742-be55-8f36615a6a2d");
+    history.push('/room/774eef22-baea-4849-af5e-1ae9419b4406');
   };
 
   return (

@@ -1,28 +1,28 @@
-import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Button from "@material-ui/core/Button";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
-import { useCurrentUser } from "client/hooks";
-import { useHistory } from "react-router-dom";
-import { useApolloClient } from "@apollo/client";
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Button from '@material-ui/core/Button';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
+import { useCurrentUser } from 'client/hooks';
+import { useHistory } from 'react-router-dom';
+import { useApolloClient } from '@apollo/client';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   menuButton: {
-    marginRight: theme.spacing(2),
+    marginRight: theme.spacing(2)
   },
   title: {
     flexGrow: 1,
-    cursor: "pointer",
-  },
+    cursor: 'pointer'
+  }
 }));
 
 const AppHeader = () => {
@@ -42,7 +42,7 @@ const AppHeader = () => {
 
   const handleLogin = () => {
     setAnchorEl(null);
-    history.push("/login");
+    history.push('/login');
   };
 
   const handleLogout = () => {
@@ -54,12 +54,12 @@ const AppHeader = () => {
   };
 
   const redirectToHome = () => {
-    history.push("/");
+    history.push('/');
   };
 
   const handleProfile = () => {
     setAnchorEl(null);
-    history.push("/profile");
+    history.push('/profile');
   };
 
   return (
@@ -88,13 +88,13 @@ const AppHeader = () => {
                 id="menu-appbar"
                 anchorEl={anchorEl}
                 anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
+                  vertical: 'top',
+                  horizontal: 'right'
                 }}
                 keepMounted
                 transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
+                  vertical: 'top',
+                  horizontal: 'right'
                 }}
                 open={Boolean(anchorEl)}
                 onClose={handleClose}

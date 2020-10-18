@@ -23,6 +23,7 @@ const initialState = {
     'Robert Downey Jr.',
     'Chris Hemsworth'
   ],
+  language: 'English',
   collectionGt: 50000000,
   collectionLt: 120000000
 };

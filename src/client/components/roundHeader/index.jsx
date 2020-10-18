@@ -27,7 +27,7 @@ const RoundHeader = ({ round, roundLimit, roundStartedAt, isSummary }) => {
 
   const getTitle = () =>
     isSummary
-      ? 'Summary'
+      ? 'Round Summary'
       : round && round !== 0
       ? `Round ${round} of ${roundLimit}`
       : `Waiting to start the game...`;

@@ -1,6 +1,8 @@
 const {
   movies,
   persons,
+  directors,
+  cast,
   genres,
   languages,
   users,
@@ -19,6 +21,8 @@ const {
 module.exports = {
   movies,
   persons,
+  directors,
+  cast,
   genres,
   languages,
   users,

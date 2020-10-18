@@ -3,6 +3,8 @@ scalar Date
 type Query {
   movies: [Movie!]!
   persons: [Person!]!
+  directors: [Person!]!
+  cast: [Person!]!
   genres: [Genre!]!
   languages: [Language!]!
   users: [User!]!

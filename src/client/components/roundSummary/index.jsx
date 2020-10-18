@@ -26,6 +26,9 @@ const enrichData = (currentDetails) => {
   }
   return _.assign(
     {},
+    currentDetails.language && {
+      'Primary Language': currentDetails.language
+    },
     currentDetails.director && {
       Director: currentDetails.director
     },

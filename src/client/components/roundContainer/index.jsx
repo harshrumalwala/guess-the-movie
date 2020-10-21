@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import 'date-fns';
 import _ from 'lodash';
 import RoundHeader from '../roundHeader';
 import { makeStyles } from '@material-ui/core/styles';
@@ -19,6 +20,8 @@ import {
 } from './util';
 import { useQuery } from '@apollo/react-hooks';
 import { Loader } from 'client/components';
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,12 +36,11 @@ const useStyles = makeStyles((theme) => ({
   parameterFormControl: {
     marginTop: theme.spacing(2),
     marginLeft: theme.spacing(2),
-    minWidth: 100
+    minWidth: 120
   },
   guessFormControl: {
     marginTop: theme.spacing(2),
-    marginLeft: theme.spacing(2),
-    minWidth: 250
+    marginLeft: theme.spacing(2)
   }
 }));
 
@@ -75,14 +77,29 @@ const RoundContainer = ({
   const [guess, setGuess] = useState('');
   const [guessValues, setGuessValues] = useState([]);
   const [isGuessDisabled, setIsGuessDisabled] = useState(true);
+  const [isGuessDateDisabled, setIsGuessDateDisabled] = useState(true);
+  const [isGuessFreeTextDisabled, setIsGuessFreeTextDisabled] = useState(true);
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   useEffect(() => {
-    if (_.includes([4, 5], question)) {
+    const disableGuessFields = () => {
+      setIsGuessDateDisabled(true);
+      setIsGuessFreeTextDisabled(true);
+      setIsGuessDisabled(true);
+    };
+
+    if (question === 4) {
       setIsParameterDisabled(false);
-      parameter === '' ? setIsGuessDisabled(true) : setIsGuessDisabled(false);
+      disableGuessFields();
+      parameter !== '' && setIsGuessDateDisabled(false);
+    } else if (question === 5) {
+      setIsParameterDisabled(false);
+      disableGuessFields();
+      parameter !== '' && setIsGuessFreeTextDisabled(false);
     } else {
       setIsParameterDisabled(true);
-      question === '' ? setIsGuessDisabled(true) : setIsGuessDisabled(false);
+      disableGuessFields();
+      question !== '' && setIsGuessDisabled(false);
     }
   }, [question, parameter]);
 
@@ -114,22 +131,40 @@ const RoundContainer = ({
     isGuessDisabled
   ]);
 
-  const handleQuestionChange = (event) => {
-    console.log(event.target.value);
-    setQuestion(event.target.value);
-  };
-
   if (loadingCast || loadingDirectors || loadingGenres || loadingLanguages)
     return <Loader />;
 
   if (castError || directorsError || genresError || languagesError)
     return <h1>Something went wrong while loading data!</h1>;
 
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+    setGuess(
+      new Date(
+        date.setHours(0, 0, 0, 0) - date.getTimezoneOffset() * 60 * 1000
+      ).toISOString()
+    );
+  };
+
+  const resetValues = () => {
+    setGuess('');
+    setSelectedDate(new Date());
+    setParameter('');
+  };
+
+  const handleQuestionChange = (event) => {
+    console.log(event.target.value);
+    resetValues();
+    setQuestion(event.target.value);
+  };
+
   const handleParameterChange = (event) => {
+    console.log(event.target.value);
     setParameter(event.target.value);
   };
 
   const handleGuessChange = (event, newValue) => {
+    console.log(newValue);
     newValue && setGuess(newValue);
   };
 
@@ -179,10 +214,30 @@ const RoundContainer = ({
           <Autocomplete
             id="guess"
             options={guessValues}
-            style={{ width: 250 }}
+            style={{ minWidth: 200 }}
+            value={guess}
             onChange={handleGuessChange}
             renderInput={(params) => <TextField {...params} label="Guess" />}
           />
+        </FormControl>
+      )}
+      {!isGuessDateDisabled && (
+        <FormControl className={classes.guessFormControl}>
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <DatePicker
+              disableFuture
+              disableToolbar
+              autoOk
+              openTo="year"
+              variant="inline"
+              format="MM/dd/yyyy"
+              id="guess-date"
+              label="Guess"
+              views={['year', 'month', 'date']}
+              value={selectedDate}
+              onChange={handleDateChange}
+            />
+          </MuiPickersUtilsProvider>
         </FormControl>
       )}
     </div>

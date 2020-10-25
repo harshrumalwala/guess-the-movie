@@ -17,7 +17,9 @@ import {
   GET_GENRES,
   GET_CAST,
   populateReleasedDate,
-  populateCollection
+  populateCollection,
+  populateCast,
+  populateGenre
 } from './util';
 import { useQuery } from '@apollo/react-hooks';
 import { Loader } from 'client/components';
@@ -48,12 +50,17 @@ const useStyles = makeStyles((theme) => ({
     width: 120
   },
   checkButton: {
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(2),
     marginLeft: theme.spacing(2)
   }
 }));
 
-const RoundQuestion = ({ currentDetails, setCurrentDetails, roundMovieId }) => {
+const RoundQuestion = ({
+  setCurrentDetails,
+  roundMovieId,
+  setGuessList,
+  guessListSize
+}) => {
   const { loading: loadingCast, error: castError, data: castData } = useQuery(
     GET_CAST
   );
@@ -96,53 +103,78 @@ const RoundQuestion = ({ currentDetails, setCurrentDetails, roundMovieId }) => {
       switch (question) {
         case 0:
           data &&
-            setCurrentDetails({ ...currentDetails, language: `${guess}` });
+            setCurrentDetails((prevDetails) => ({
+              ...prevDetails,
+              language: `${guess}`
+            }));
           break;
         case 1:
           data &&
-            setCurrentDetails({ ...currentDetails, director: `${guess}` });
+            setCurrentDetails((prevDetails) => ({
+              ...prevDetails,
+              director: `${guess}`
+            }));
           break;
         case 2:
           data &&
-            setCurrentDetails({
-              ...currentDetails,
-              cast: currentDetails?.cast
-                ? _.uniq([...currentDetails.cast, guess])
-                : [guess]
-            });
+            setCurrentDetails((prevDetails) =>
+              populateCast(prevDetails, guess, data)
+            );
           break;
         case 3:
           data &&
-            setCurrentDetails({
-              ...currentDetails,
-              genre: currentDetails?.genre
-                ? _.uniq([...currentDetails.genre, guess])
-                : [guess]
-            });
+            setCurrentDetails((prevDetails) =>
+              populateGenre(prevDetails, guess, data)
+            );
           break;
         case 4:
-          setCurrentDetails(populateReleasedDate(currentDetails, guess, data));
+          setCurrentDetails((prevDetails) =>
+            populateReleasedDate(prevDetails, guess, data)
+          );
           break;
         case 5:
-          setCurrentDetails(populateCollection(currentDetails, guess, data));
+          setCurrentDetails((prevDetails) =>
+            populateCollection(prevDetails, guess, data)
+          );
           break;
         default:
           break;
       }
     };
 
+    const updateGuessList = () => {
+      let guessValue = guess;
+      if (question === 4) {
+        const formattedDate = new Date(guess);
+        guessValue = `${formattedDate.getDate()}/${formattedDate.getMonth()}/${formattedDate.getFullYear()}`;
+      } else if (question === 5) {
+        guessValue = `$${guess / 1000000} million`;
+      }
+
+      setGuessList((prevList) => [
+        ...prevList,
+        {
+          guess: `${questionValues[question]}${
+            Number(parameter) ? ` ${parameterValues[parameter]}` : ''
+          } - ${guessValue}`,
+          result: _.includes([0, 2], parameter) ? !data : data
+        }
+      ]);
+    };
+
     if (data === true || data === false) {
       updateCurrentDetails();
+      updateGuessList();
       reset();
     }
   }, [
     data,
     setData,
-    currentDetails,
     parameter,
     question,
     guess,
-    setCurrentDetails
+    setCurrentDetails,
+    setGuessList
   ]);
 
   useEffect(() => {

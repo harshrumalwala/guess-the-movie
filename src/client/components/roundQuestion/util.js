@@ -74,3 +74,15 @@ export const populateCollection = (currentDetails, guess, data) =>
       ? { collectionLt: guess }
       : {}
   );
+
+export const populateCast = (currentDetails, guess, data) => ({
+  ...currentDetails,
+  cast: currentDetails?.cast ? _.uniq([...currentDetails.cast, guess]) : [guess]
+});
+
+export const populateGenre = (currentDetails, guess, data) => ({
+  ...currentDetails,
+  genre: currentDetails?.genre
+    ? _.uniq([...currentDetails.genre, guess])
+    : [guess]
+});

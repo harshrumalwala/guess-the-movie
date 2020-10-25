@@ -35,7 +35,6 @@ const Room = () => {
         roundLimit={watchRoom?.roundLimit}
         roundCompleted={watchRoom?.roundCompleted}
         roundStartedAt={watchRoom?.roundStartedAt}
-        currentDetails={currentDetails}
         setCurrentDetails={setCurrentDetails}
       />
       <RoundSummary currentDetails={currentDetails} />

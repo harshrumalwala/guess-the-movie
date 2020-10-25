@@ -6,6 +6,7 @@ import Container from '@material-ui/core/Container';
 import { useCurrentUser } from 'client/hooks';
 import { Button } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
+import { ListRooms } from 'client/components';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -29,6 +30,7 @@ const Home = () => {
   };
 
   return (
+    <>
     <Container maxWidth="xs">
       <CssBaseline />
       <div className={classes.container}>
@@ -38,6 +40,8 @@ const Home = () => {
         {token && (
           <>
             <span>User is logged in</span>
+            <ListRooms>
+            </ListRooms> 
             <Button
               onClick={handleJoinRoom}
               variant="contained"
@@ -49,7 +53,8 @@ const Home = () => {
           </>
         )}
       </div>
-    </Container>
+    </Container>     
+  </>
   );
 };
 

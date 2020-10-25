@@ -7,6 +7,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import InboxIcon from '@material-ui/icons/Inbox';
 import DraftsIcon from '@material-ui/icons/Drafts';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,11 +23,17 @@ function ListItemLink(props) {
 
 export default function SimpleList() {
   const classes = useStyles();
+  const history = useHistory();
+
+  const handleJoinRoom = () => {
+    history.push('/room/774eef22-baea-4849-af5e-1ae9419b4406');
+  };
 
   return (
     <div className={classes.root}>
       <List component="nav" aria-label="main mailbox folders">
-        <ListItem button>
+        <ListItem button onClick={handleJoinRoom}>
+          
           {/* <ListItemIcon>
             <InboxIcon />
           </ListItemIcon> */}

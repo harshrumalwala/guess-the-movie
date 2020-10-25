@@ -12,26 +12,10 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const initialState = {
-  releasedAfter: '2011-10-05T14:48:00.000Z',
-  releasedBefore: '2013-11-03T14:48:00.000Z',
-  genre: ['Sci Fi', 'Thriller'],
-  director: 'Tom Cruise',
-  cast: [
-    'Vin Diesel',
-    'Angelina Jolie',
-    'Robert Downey Jr.',
-    'Chris Hemsworth'
-  ],
-  language: 'English',
-  collectionGt: 50000000,
-  collectionLt: 120000000
-};
-
 const Room = () => {
   const classes = useStyles();
   const { roomId } = useParams();
-  const [currentDetails, setCurrentDetails] = useState(initialState);
+  const [currentDetails, setCurrentDetails] = useState();
   const { data } = useRoom();
   const watchRoom = data?.watchRoom;
   const { updateRoom } = useUpdateRoom();
@@ -51,6 +35,7 @@ const Room = () => {
         roundLimit={watchRoom?.roundLimit}
         roundCompleted={watchRoom?.roundCompleted}
         roundStartedAt={watchRoom?.roundStartedAt}
+        currentDetails={currentDetails}
         setCurrentDetails={setCurrentDetails}
       />
       <RoundSummary currentDetails={currentDetails} />

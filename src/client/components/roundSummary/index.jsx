@@ -16,53 +16,53 @@ const useStyles = makeStyles((theme) => ({
 
 const enrichData = (currentDetails) => {
   let formattedReleasedAfterDate, formattedReleasedBeforeDate;
-  if (currentDetails.releasedAfter) {
+  if (currentDetails?.releasedAfter) {
     const releasedAfterDate = new Date(currentDetails.releasedAfter);
     formattedReleasedAfterDate = `${releasedAfterDate.getDate()}/${releasedAfterDate.getMonth()}/${releasedAfterDate.getFullYear()}`;
   }
-  if (currentDetails.releasedBefore) {
+  if (currentDetails?.releasedBefore) {
     const releasedBeforeDate = new Date(currentDetails.releasedBefore);
     formattedReleasedBeforeDate = `${releasedBeforeDate.getDate()}/${releasedBeforeDate.getMonth()}/${releasedBeforeDate.getFullYear()}`;
   }
   return _.assign(
     {},
-    currentDetails.language && {
+    currentDetails?.language && {
       'Primary Language': currentDetails.language
     },
-    currentDetails.director && {
+    currentDetails?.director && {
       Director: currentDetails.director
     },
-    currentDetails.cast && {
+    currentDetails?.cast && {
       Cast: _.join(currentDetails.cast, ', ')
     },
-    currentDetails.genre && {
+    currentDetails?.genre && {
       Genre: _.join(currentDetails.genre, ', ')
     },
-    currentDetails.releasedAfter && currentDetails.releasedBefore
+    currentDetails?.releasedAfter && currentDetails?.releasedBefore
       ? {
           Released: `Between ${formattedReleasedAfterDate} - ${formattedReleasedBeforeDate}`
         }
-      : currentDetails.releasedAfter
+      : currentDetails?.releasedAfter
       ? { Released: `After ${formattedReleasedAfterDate}` }
-      : currentDetails.releasedBefore && {
+      : currentDetails?.releasedBefore && {
           Released: `Before ${formattedReleasedBeforeDate}`
         },
-    currentDetails.collectionGt && currentDetails.collectionLt
+    currentDetails?.collectionGt && currentDetails?.collectionLt
       ? {
           'Estimated Box Office Collection': `Between $${
             currentDetails.collectionGt / 1000000
-          }MM - $${currentDetails.collectionLt / 1000000}MM`
+          } million - $${currentDetails.collectionLt / 1000000} million`
         }
-      : currentDetails.collectionGt
+      : currentDetails?.collectionGt
       ? {
           'Estimated Box Office Collection': `More than $${
             currentDetails.collectionGt / 1000000
-          }MM`
+          } million`
         }
-      : currentDetails.collectionLt && {
+      : currentDetails?.collectionLt && {
           'Estimated Box Office Collection': `Less than $${
             currentDetails.collectionLt / 1000000
-          }MM`
+          } million`
         }
   );
 };

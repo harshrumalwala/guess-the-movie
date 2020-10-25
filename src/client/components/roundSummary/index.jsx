@@ -18,11 +18,11 @@ const enrichData = (currentDetails) => {
   let formattedReleasedAfterDate, formattedReleasedBeforeDate;
   if (currentDetails?.releasedAfter) {
     const releasedAfterDate = new Date(currentDetails.releasedAfter);
-    formattedReleasedAfterDate = `${releasedAfterDate.getDate()}/${releasedAfterDate.getMonth()}/${releasedAfterDate.getFullYear()}`;
+    formattedReleasedAfterDate = `${releasedAfterDate.getDate()}/${releasedAfterDate.getMonth() + 1}/${releasedAfterDate.getFullYear()}`;
   }
   if (currentDetails?.releasedBefore) {
     const releasedBeforeDate = new Date(currentDetails.releasedBefore);
-    formattedReleasedBeforeDate = `${releasedBeforeDate.getDate()}/${releasedBeforeDate.getMonth()}/${releasedBeforeDate.getFullYear()}`;
+    formattedReleasedBeforeDate = `${releasedBeforeDate.getDate()}/${releasedBeforeDate.getMonth() + 1}/${releasedBeforeDate.getFullYear()}`;
   }
   return _.assign(
     {},

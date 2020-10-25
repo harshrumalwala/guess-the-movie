@@ -10,7 +10,12 @@ export const questionValues = [
   `Is movie's box office collection`
 ];
 
-export const parameterValues = [`before`, `after`, `less than`, `more than`];
+export const parameterValues = [
+  { key: 0, displayValue: `before` },
+  { key: 1, displayValue: `after` },
+  { key: 2, displayValue: `less than` },
+  { key: 3, displayValue: `more than` }
+];
 
 export const questionParameterMap = {
   4: [0, 1],
@@ -86,3 +91,5 @@ export const populateGenre = (currentDetails, guess, data) => ({
     ? _.uniq([...currentDetails.genre, guess])
     : [guess]
 });
+
+export const isNumber = (guess) => guess !== '' && !isNaN(guess);

@@ -19,7 +19,8 @@ import {
   populateReleasedDate,
   populateCollection,
   populateCast,
-  populateGenre
+  populateGenre,
+  isNumber
 } from './util';
 import { useQuery } from '@apollo/react-hooks';
 import { Loader } from 'client/components';
@@ -146,7 +147,7 @@ const RoundQuestion = ({
       let guessValue = guess;
       if (question === 4) {
         const formattedDate = new Date(guess);
-        guessValue = `${formattedDate.getDate()}/${formattedDate.getMonth()}/${formattedDate.getFullYear()}`;
+        guessValue = `${formattedDate.getDate()}/${formattedDate.getMonth() + 1}/${formattedDate.getFullYear()}`;
       } else if (question === 5) {
         guessValue = `$${guess / 1000000} million`;
       }
@@ -155,7 +156,9 @@ const RoundQuestion = ({
         ...prevList,
         {
           guess: `${questionValues[question]}${
-            Number(parameter) ? ` ${parameterValues[parameter]}` : ''
+            isNumber(parameter)
+              ? ` ${parameterValues[parameter].displayValue}`
+              : ''
           } - ${guessValue}`,
           result: _.includes([0, 2], parameter) ? !data : data
         }
@@ -266,7 +269,7 @@ const RoundQuestion = ({
 
   const handleCollectionChange = (event) => {
     const value = event.target.value;
-    setGuess(Number(value) ? value * 1000000 : value);
+    setGuess(isNumber(value) ? value * 1000000 : value);
   };
 
   const handleVerifyGuess = () => {
@@ -276,7 +279,9 @@ const RoundQuestion = ({
   return (
     <>
       <FormControl className={classes.questionFormControl}>
-        <InputLabel id="question-label">Question</InputLabel>
+        <InputLabel id="question-label">
+          Question {guessListSize + 1}
+        </InputLabel>
         <Select id="question" value={question} onChange={handleQuestionChange}>
           {_.map(questionValues, (value, key) => (
             <MenuItem key={key} value={key}>
@@ -294,12 +299,12 @@ const RoundQuestion = ({
             onChange={handleParameterChange}
           >
             {_.chain(parameterValues)
-              .filter((value, key) =>
-                _.includes(questionParameterMap[question], key)
+              .filter((value) =>
+                _.includes(questionParameterMap[question], value.key)
               )
-              .map((value, key) => (
-                <MenuItem key={key} value={key}>
-                  {value}
+              .map((value) => (
+                <MenuItem key={value.key} value={value.key}>
+                  {value.displayValue}
                 </MenuItem>
               ))
               .value()}
@@ -344,7 +349,7 @@ const RoundQuestion = ({
             autoComplete="off"
             id="guess-collection"
             label="Guess"
-            value={Number(guess) ? guess / 1000000 : guess}
+            value={isNumber(guess) ? guess / 1000000 : guess}
             onChange={handleCollectionChange}
             InputProps={{
               startAdornment: (

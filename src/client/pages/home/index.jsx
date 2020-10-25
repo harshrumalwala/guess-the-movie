@@ -40,6 +40,8 @@ const Home = () => {
         {token && (
           <>
             <span>User is logged in</span>
+            <ListRooms>
+            </ListRooms> 
             <Button
               onClick={handleJoinRoom}
               variant="contained"
@@ -51,9 +53,7 @@ const Home = () => {
           </>
         )}
       </div>
-    </Container>
-    <ListRooms>
-      </ListRooms>      
+    </Container>     
   </>
   );
 };

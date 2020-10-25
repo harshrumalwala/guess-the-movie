@@ -41,6 +41,7 @@ export default function SimpleList() {
         </ListItem>
         <ListItem button>
           {/* <ListItemIcon>
+          Add logic to fetch from graphql
             <DraftsIcon />
           </ListItemIcon> */}
           <ListItemText primary="Room2" />

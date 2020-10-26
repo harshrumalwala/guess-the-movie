@@ -15,6 +15,7 @@ type Query {
   isReleasedAfter(id: Int!, releaseDate: Date!): Boolean!
   isGenre(id: Int!, genre: String!): Boolean!
   isPrimaryLanguage(id: Int!, language: String!): Boolean!
+  isMovie(id: Int!, name: String!): Boolean!
 }
 
 type Mutation {

@@ -5,7 +5,7 @@ export const questionValues = [
   `Is movie's primary language`,
   `Is movie directed by`,
   `Does movie cast include`,
-  `Is movie genre in`,
+  `Is movie's genre`,
   `Is movie released`,
   `Is movie's box office collection`
 ];

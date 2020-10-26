@@ -27,7 +27,7 @@ const StyledListItem = withStyles(() => ({
 
 const StyledListItemText = withStyles(() => ({
   primary: {
-    fontSize: '13px',
+    fontSize: '14px',
     fontStyle: 'italic'
   }
 }))(ListItemText);

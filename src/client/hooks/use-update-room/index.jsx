@@ -22,9 +22,6 @@ const UPDATE_ROOM = gql`
       round
       roundLimit
       roundMovieId
-      language {
-        name
-      }
       players {
         id
         name

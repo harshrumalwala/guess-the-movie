@@ -147,7 +147,9 @@ const RoundQuestion = ({
       let guessValue = guess;
       if (question === 4) {
         const formattedDate = new Date(guess);
-        guessValue = `${formattedDate.getDate()}/${formattedDate.getMonth() + 1}/${formattedDate.getFullYear()}`;
+        guessValue = `${formattedDate.getDate()}/${
+          formattedDate.getMonth() + 1
+        }/${formattedDate.getFullYear()}`;
       } else if (question === 5) {
         guessValue = `$${guess / 1000000} million`;
       }

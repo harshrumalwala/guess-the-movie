@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useRoom, useUpdateRoom } from 'client/hooks';
 import { useParams } from 'react-router-dom';
 import { RoundContainer, RoundSummary, Scoreboard } from 'client/components';
 import { makeStyles } from '@material-ui/core/styles';
+import _ from 'lodash';
+import { calculateTimeLeft } from 'client/components/util';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -16,15 +18,54 @@ const Room = () => {
   const classes = useStyles();
   const { roomId } = useParams();
   const [currentDetails, setCurrentDetails] = useState();
+  const [guessList, setGuessList] = useState([]);
   const { data } = useRoom();
   const watchRoom = data?.watchRoom;
   const { updateRoom } = useUpdateRoom();
+  const [timeLeft, setTimeLeft] = useState(
+    calculateTimeLeft(watchRoom?.roundStartedAt)
+  );
 
-  const onRoundComplete = () => {
-    updateRoom({
-      variables: { id: roomId, hasCompletedRound: true, score: 50 }
-    });
-  };
+  const onRoundComplete = useCallback(
+    (isGuessed) => {
+      let score = 0;
+      if (isGuessed) {
+        const pendingTime =
+          90 -
+          Math.floor(
+            (new Date().getTime() -
+              new Date(watchRoom?.roundStartedAt).getTime()) /
+              1000
+          ) -
+          10;
+        const pendingQuestions = 15 - _.size(guessList);
+        score = 20 + pendingTime * 2 + pendingQuestions * 10;
+      }
+      updateRoom({
+        variables: { id: roomId, hasCompletedRound: true, score }
+      });
+    },
+    [guessList, roomId, watchRoom, updateRoom]
+  );
+
+  useEffect(() => {
+    if (timeLeft === 90) {
+      setGuessList([]);
+      setCurrentDetails([]);
+    }
+  }, [timeLeft]);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft(calculateTimeLeft(watchRoom?.roundStartedAt));
+    }, 950);
+    if (timeLeft === 0) {
+      clearInterval(timer);
+      setTimeLeft(-1);
+      onRoundComplete(false);
+    }
+    return () => clearInterval(timer);
+  }, [timeLeft, watchRoom, setGuessList, setCurrentDetails, onRoundComplete]);
 
   return (
     <div className={classes.root}>
@@ -36,8 +77,18 @@ const Room = () => {
         roundCompleted={watchRoom?.roundCompleted}
         roundStartedAt={watchRoom?.roundStartedAt}
         setCurrentDetails={setCurrentDetails}
+        onRoundComplete={onRoundComplete}
+        guessList={guessList}
+        setGuessList={setGuessList}
+        timeLeft={timeLeft}
       />
-      <RoundSummary currentDetails={currentDetails} />
+      <RoundSummary
+        currentDetails={currentDetails}
+        roundMovieId={watchRoom?.roundMovieId}
+        onRoundComplete={onRoundComplete}
+        roundStartedAt={watchRoom?.roundStartedAt}
+        timeLeft={timeLeft}
+      />
     </div>
   );
 };

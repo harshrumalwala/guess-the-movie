@@ -7,6 +7,9 @@ import Typography from '@material-ui/core/Typography';
 const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1
+  },
+  timer: {
+    marginRight: theme.spacing(2)
   }
 }));
 
@@ -22,14 +25,16 @@ const StyledToolbar = withStyles((theme) => ({
   }
 }))(Toolbar);
 
-const RoundHeader = ({ round, roundLimit, roundStartedAt, isSummary }) => {
+const RoundHeader = ({ round, roundLimit, timeLeft, isSummary }) => {
   const classes = useStyles();
 
   const getTitle = () =>
     isSummary
       ? 'Round Summary'
       : round && round !== 0
-      ? `Round ${round} of ${roundLimit}`
+      ? timeLeft <= 90
+        ? `Round ${round} of ${roundLimit}`
+        : `Next round starting in`
       : `Waiting to start the game...`;
 
   return (
@@ -38,6 +43,11 @@ const RoundHeader = ({ round, roundLimit, roundStartedAt, isSummary }) => {
         <Typography variant="h6" className={classes.title}>
           {getTitle()}
         </Typography>
+        {!isSummary && timeLeft && !isNaN(timeLeft) && timeLeft > 0 && (
+          <Typography variant="h6" className={classes.timer}>
+            {timeLeft > 90 ? timeLeft - 90 : timeLeft}
+          </Typography>
+        )}
       </StyledToolbar>
     </StyledAppBar>
   );

@@ -7,7 +7,7 @@ const {
   languages,
   users,
   rooms
-} = require("./findAll")
+} = require('./findAll');
 
 const {
   isPersonInCast,
@@ -16,7 +16,8 @@ const {
   isReleasedAfter,
   isGenre,
   isPrimaryLanguage,
-} = require("./filter")
+  isMovie
+} = require('./filter');
 
 module.exports = {
   movies,
@@ -32,5 +33,6 @@ module.exports = {
   isBoxOfficeCollectionGreaterThan,
   isReleasedAfter,
   isGenre,
-  isPrimaryLanguage
-}
+  isPrimaryLanguage,
+  isMovie
+};

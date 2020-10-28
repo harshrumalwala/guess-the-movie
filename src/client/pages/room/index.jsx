@@ -20,11 +20,30 @@ const Room = () => {
   const [currentDetails, setCurrentDetails] = useState();
   const [guessList, setGuessList] = useState([]);
   const { data } = useRoom();
-  const watchRoom = data?.watchRoom;
-  const { updateRoom } = useUpdateRoom();
+  const { updateRoom, data: updateRoomData } = useUpdateRoom();
+  const watchRoom = data?.watchRoom ?? updateRoomData?.updateRoom;
   const [timeLeft, setTimeLeft] = useState(
     calculateTimeLeft(watchRoom?.roundStartedAt)
   );
+
+  useEffect(() => {
+    updateRoom({
+      variables: { id: roomId }
+    });
+
+    const cleanup = () =>
+      updateRoom({
+        variables: { id: roomId, hasPlayerLeft: true }
+      });
+
+    window.addEventListener('beforeunload', cleanup);
+
+    return () => {
+      cleanup();
+      window.removeEventListener('beforeunload', cleanup);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onRoundComplete = useCallback(
     (isGuessed) => {
@@ -49,11 +68,11 @@ const Room = () => {
   );
 
   useEffect(() => {
-    if (timeLeft === 90) {
+    if (timeLeft === 90 || watchRoom?.round === 0) {
       setGuessList([]);
       setCurrentDetails([]);
     }
-  }, [timeLeft]);
+  }, [timeLeft, watchRoom]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -88,6 +107,7 @@ const Room = () => {
         onRoundComplete={onRoundComplete}
         roundStartedAt={watchRoom?.roundStartedAt}
         timeLeft={timeLeft}
+        round={watchRoom?.round}
       />
     </div>
   );

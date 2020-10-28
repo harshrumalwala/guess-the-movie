@@ -48,7 +48,10 @@ const updateRoomOnNewRound = (room, movies, isGameReady) => {
 };
 
 const updateRoomOnPlayerExit = (room, userId, hasPlayerLeft) => {
-  if (hasPlayerLeft) {
+  if (
+    hasPlayerLeft &&
+    _.chain(room.players).filter(['id', userId]).size().value() > 0
+  ) {
     return _.assign(
       {
         players: {

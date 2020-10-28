@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 
 const AppHeader = () => {
   const classes = useStyles();
-  const { token, setToken } = useCurrentUser();
+  const { token, setToken, setUserId } = useCurrentUser();
   const [anchorEl, setAnchorEl] = useState(null);
   const history = useHistory();
   const client = useApolloClient();
@@ -48,6 +48,7 @@ const AppHeader = () => {
   const handleLogout = () => {
     setAnchorEl(null);
     setToken(null);
+    setUserId(null);
     client.resetStore();
     localStorage.clear();
     redirectToHome();

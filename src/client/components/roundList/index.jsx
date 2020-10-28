@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: theme.spacing(2),
     flexGrow: 1,
-    maxHeight: '60vh',
+    maxHeight: '70vh',
     overflowY: 'auto'
   }
 }));

@@ -44,15 +44,16 @@ const Login = () => {
   const history = useHistory();
   const [userName, setUserName] = useState('');
   const [loginUser, { data }] = useMutation(LOGIN_USER);
-  const { setToken } = useCurrentUser();
+  const { setToken, setUserId } = useCurrentUser();
 
   useEffect(() => {
     if (data) {
       setToken(data.login.token);
+      setUserId(data.login.id);
       localStorage.setItem('token', data.login.token);
       history.push('/');
     }
-  }, [data, setToken, history]);
+  }, [data, setToken, setUserId, history]);
 
   const handleLogin = (e) => {
     e.preventDefault();

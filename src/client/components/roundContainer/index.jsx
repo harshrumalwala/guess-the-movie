@@ -6,6 +6,7 @@ import RoundQuestion from '../roundQuestion';
 import RoundList from '../roundList';
 import _ from 'lodash';
 import { isRoundActive } from 'client/components/util';
+import { useCurrentUser } from 'client/hooks';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,15 +25,20 @@ const RoundContainer = ({
   setCurrentDetails,
   guessList,
   setGuessList,
-  onRoundComplete,
   timeLeft
 }) => {
   const classes = useStyles();
+  const { userId } = useCurrentUser();
+  const hasCompletedRound =
+    _.chain(roundCompleted)
+      .filter(['id', parseInt(userId)])
+      .size()
+      .value() > 0;
 
   return (
     <div className={classes.root}>
       <RoundHeader round={round} roundLimit={roundLimit} timeLeft={timeLeft} />
-      {isRoundActive(roundStartedAt) && (
+      {isRoundActive(roundStartedAt) && !hasCompletedRound && (
         <RoundQuestion
           guessListSize={_.size(guessList)}
           currentDetails={currentDetails}

@@ -99,7 +99,8 @@ const RoundSummary = ({
   roundMovieId,
   onRoundComplete,
   roundStartedAt,
-  timeLeft
+  timeLeft,
+  round
 }) => {
   const classes = useStyles();
   const [movie, setMovie] = useState('');
@@ -129,7 +130,7 @@ const RoundSummary = ({
 
   return (
     <div className={classes.root}>
-      <RoundHeader isSummary={true} />
+      <RoundHeader isSummary={true} round={round} />
       {isRoundActive(roundStartedAt) &&
         (!data?.isMovie ? (
           <div className={classes.guessMovie}>

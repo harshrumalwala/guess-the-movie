@@ -7,8 +7,15 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import birdsOfPrey from 'images/birdsOfPrey.jpg';
 
 const useStyles = makeStyles({
+  root: {
+    backgroundImage: `url(${birdsOfPrey})`,
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
+    backgroundSize: 'cover'
+  },
   table: {
     width: '18%',
     minWidth: '275px'
@@ -18,53 +25,70 @@ const useStyles = makeStyles({
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: 'darkmagenta',
-    color: theme.palette.common.white,
+    color: theme.palette.common.white
   },
   body: {
     fontSize: 14,
-  },
+    color: 'gold'
+  }
 }))(TableCell);
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
-    '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.action.hover,
-    },
-  },
+    backgroundImage: 'linear-gradient(to right, #a5204a  , #1d2671)'
+  }
 }))(TableRow);
 
-const Scoreboard = ({players}) => {
+const Scoreboard = ({ players, roundCompleted }) => {
   const classes = useStyles();
-  
+
   if (players)
     players = _.chain(players)
       .orderBy(['score'], ['desc'])
       .map((v, k) => ({ ...v, rank: k + 1 }))
       .value();
-  
-      return (
-    <TableContainer className={classes.table}>
-      <Table stickyHeader>
-        <TableHead>
-          <StyledTableRow>
-            <StyledTableCell>Rank</StyledTableCell>
-            <StyledTableCell>Players</StyledTableCell>
-            <StyledTableCell>Score</StyledTableCell>
-          </StyledTableRow>
-        </TableHead>
-        <TableBody>
-          {_.map(players, (player) => (
-            <StyledTableRow key={player.rank}>
-              <StyledTableCell component="th" scope="row">
-                {player.rank}
-              </StyledTableCell>
-              <StyledTableCell>{player.name}</StyledTableCell>
-              <StyledTableCell>{player.score}</StyledTableCell>
+
+  const hasCompletedRound = (player) =>
+    _.assign(
+      {},
+      _.chain(roundCompleted).map('id').includes(player?.id).value() && {
+        color: 'lawngreen'
+      }
+    );
+
+  return (
+    <div className={classes.root}>
+      <TableContainer className={classes.table}>
+        <Table stickyHeader>
+          <TableHead>
+            <StyledTableRow>
+              <StyledTableCell>Rank</StyledTableCell>
+              <StyledTableCell>Players</StyledTableCell>
+              <StyledTableCell>Score</StyledTableCell>
             </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {_.map(players, (player) => (
+              <StyledTableRow key={player.rank}>
+                <StyledTableCell
+                  component="th"
+                  scope="row"
+                  style={hasCompletedRound(player)}
+                >
+                  {player.rank}
+                </StyledTableCell>
+                <StyledTableCell style={hasCompletedRound(player)}>
+                  {player.name}
+                </StyledTableCell>
+                <StyledTableCell style={hasCompletedRound(player)}>
+                  {player.score}
+                </StyledTableCell>
+              </StyledTableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
   );
 };
 

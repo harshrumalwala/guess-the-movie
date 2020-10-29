@@ -1,8 +1,5 @@
-const _ = require("lodash");
-const {
-  getUserId,
-  includeNestedRoomAttributes,
-} = require('../../../util');
+const _ = require('lodash');
+const { getUserId, includeNestedRoomAttributes } = require('../../../util');
 const {
   updateRoomOnNewRound,
   updateRoomOnPlayerExit,
@@ -14,7 +11,9 @@ const {
 
 const createRoom = async (parent, args, context) => {
   const userId = getUserId(context);
-  const enrichedData = _.assign({}, {
+  const enrichedData = _.assign(
+    {},
+    {
       round: 0,
       roundLimit: args.roundLimit,
       host: {
@@ -30,18 +29,18 @@ const createRoom = async (parent, args, context) => {
     },
     args.languages && {
       languages: {
-        connect: _.map(args.languages, l => ({
+        connect: _.map(args.languages, (l) => ({
           name: l.name
         }))
-
       }
-    })
+    }
+  );
 
   return await context.prisma.room.create({
     data: enrichedData,
     include: includeNestedRoomAttributes()
   });
-}
+};
 
 const updateRoom = async (parent, args, context) => {
   const userId = getUserId(context);
@@ -51,60 +50,71 @@ const updateRoom = async (parent, args, context) => {
     },
     include: includeNestedRoomAttributes()
   });
-  const movies = await context.prisma.movie.findMany(_.size(room.languages) > 0 && {
-    where: {
-      language: {
-        name: {
-          in: _.map(room.languages, 'name')
+  const movies = await context.prisma.movie.findMany(
+    _.size(room.languages) > 0 && {
+      where: {
+        language: {
+          name: {
+            in: _.map(room.languages, 'name')
+          }
         }
       }
-    },
-  });
-
-  const preEnrichedData = _.assign({},
-    updatePlayerNameOrScore(userId, args.score, args.name),
+    }
+  );
+  const preEnrichedData = _.assign(
+    {},
+    updatePlayerNameOrScore(
+      _.find(room.players, ['id', userId])?.score,
+      userId,
+      args.score,
+      args.name
+    ),
     updateRoomOnPlayerJoin(room, userId),
     updateRoomOnPlayerRoundComplete(room, userId, args.hasCompletedRound),
     updateRoomOnPlayerExit(room, userId, args.hasPlayerLeft),
     updateRoomOnGameRestart(room, movies, args.isGameRestarted)
-  )
+  );
 
   let updatedRoomData;
 
   if (!_.isEmpty(preEnrichedData))
     updatedRoomData = await context.prisma.room.update({
       where: {
-        id: args.id,
+        id: args.id
       },
       data: preEnrichedData,
       include: includeNestedRoomAttributes()
-    })
+    });
 
   updatedRoomData = await context.prisma.room.update({
     where: {
-      id: args.id,
+      id: args.id
     },
-    data: updateRoomOnNewRound(updatedRoomData ? updatedRoomData : room, movies, args.isGameReady),
+    data: updateRoomOnNewRound(
+      updatedRoomData ? updatedRoomData : room,
+      movies,
+      args.isGameReady
+    ),
     include: includeNestedRoomAttributes()
-  })
+  });
 
   context.pubsub.publish(args.id, updatedRoomData);
 
   return updatedRoomData;
-}
+};
 
 const deleteRoom = async (parent, args, context) => {
   const deleteRoom = await context.prisma.room.delete({
     where: {
-      id: args.id,
+      id: args.id
     },
     include: includeNestedRoomAttributes()
   });
   return deleteRoom;
-}
+};
 
 module.exports = {
   createRoom,
   updateRoom,
   deleteRoom
-}
+};

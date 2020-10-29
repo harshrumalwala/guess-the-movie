@@ -10,7 +10,8 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'row',
-    margin: theme.spacing(1)
+    margin: theme.spacing(1),
+    height: 'calc(100vh - 80px)'
   }
 }));
 
@@ -88,7 +89,10 @@ const Room = () => {
 
   return (
     <div className={classes.root}>
-      <Scoreboard players={watchRoom?.players} />
+      <Scoreboard
+        players={watchRoom?.players}
+        roundCompleted={watchRoom?.roundCompleted}
+      />
       <RoundContainer
         round={watchRoom?.round}
         roundMovieId={watchRoom?.roundMovieId}
@@ -108,6 +112,7 @@ const Room = () => {
         roundStartedAt={watchRoom?.roundStartedAt}
         timeLeft={timeLeft}
         round={watchRoom?.round}
+        guessList={guessList}
       />
     </div>
   );

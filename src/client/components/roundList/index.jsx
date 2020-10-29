@@ -13,22 +13,25 @@ const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: theme.spacing(2),
     flexGrow: 1,
-    maxHeight: '70vh',
+    maxHeight: '73vh',
     overflowY: 'auto'
   }
 }));
 
 const StyledListItem = withStyles(() => ({
   root: {
+    boxShadow:
+      '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
     paddingTop: '2px',
-    paddingBottom: '2px'
+    paddingBottom: '2px',
+    backgroundImage: 'linear-gradient(to right, #a5204a  , #1d2671)'
   }
 }))(ListItem);
 
 const StyledListItemText = withStyles(() => ({
   primary: {
     fontSize: '14px',
-    fontStyle: 'italic'
+    color: 'gold'
   }
 }))(ListItemText);
 

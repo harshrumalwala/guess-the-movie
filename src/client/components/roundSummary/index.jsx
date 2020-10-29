@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import RoundHeader from '../roundHeader';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import _ from 'lodash';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -13,21 +13,39 @@ import TextField from '@material-ui/core/TextField';
 import { gql, useLazyQuery } from '@apollo/react-hooks';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { isRoundActive } from 'client/components/util';
+import titanic from 'images/titanic.jpg';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     marginLeft: theme.spacing(1),
-    width: '20%'
+    width: '20%',
+    backgroundImage: `url(${titanic})`,
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
+    backgroundSize: 'cover'
   },
   guessMovie: {
     margin: theme.spacing(2),
     display: 'flex',
-    color: 'green',
-    backgroundColor: 'azure'
+    backgroundColor: 'white',
+    boxShadow: '0 4px 8px 0 grey, 0 6px 20px 0 lightSalmon'
+  },
+  correctGuess: {
+    margin: theme.spacing(2),
+    borderRadius: '10px',
+    height: '40px',
+    backgroundColor: 'limegreen',
+    color:'black',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    boxShadow: '0 2px 4px 0 grey, 0 5px 10px 0 lightSalmon'
   },
   input: {
-    marginLeft: theme.spacing(1),
     flex: 1
+  },
+  summary: {
+    marginTop: theme.spacing(3)
   }
 }));
 
@@ -70,18 +88,18 @@ const enrichData = (currentDetails) => {
         },
     currentDetails?.collectionGt && currentDetails?.collectionLt
       ? {
-          'Estimated Box Office Collection': `Between $${
+          'Box Office Collection': `Between $${
             currentDetails.collectionGt / 1000000
           } million - $${currentDetails.collectionLt / 1000000} million`
         }
       : currentDetails?.collectionGt
       ? {
-          'Estimated Box Office Collection': `More than $${
+          'Box Office Collection': `More than $${
             currentDetails.collectionGt / 1000000
           } million`
         }
       : currentDetails?.collectionLt && {
-          'Estimated Box Office Collection': `Less than $${
+          'Box Office Collection': `Less than $${
             currentDetails.collectionLt / 1000000
           } million`
         }
@@ -94,13 +112,26 @@ const CHECK_MOVIE = gql`
   }
 `;
 
+const StyledTableCell = withStyles((theme) => ({
+  body: {
+    color: 'gold'
+  }
+}))(TableCell);
+
+const StyledTableRow = withStyles((theme) => ({
+  root: {
+    backgroundImage: 'linear-gradient(to right, #a5204a  , #1d2671)'
+  }
+}))(TableRow);
+
 const RoundSummary = ({
   currentDetails,
   roundMovieId,
   onRoundComplete,
   roundStartedAt,
   timeLeft,
-  round
+  round,
+  guessList
 }) => {
   const classes = useStyles();
   const [movie, setMovie] = useState('');
@@ -122,16 +153,18 @@ const RoundSummary = ({
   }, [data]);
 
   const handleGuessMovie = () => {
-    checkMovie({
-      variables: { id: roundMovieId, name: movie }
-    });
-    setMovie('');
+    if (!loading) {
+      checkMovie({
+        variables: { id: roundMovieId, name: movie }
+      });
+      setMovie('');
+    }
   };
 
   return (
     <div className={classes.root}>
       <RoundHeader isSummary={true} round={round} />
-      {isRoundActive(roundStartedAt) &&
+      {isRoundActive(roundStartedAt, _.size(guessList)) &&
         (!data?.isMovie ? (
           <div className={classes.guessMovie}>
             <TextField
@@ -139,37 +172,27 @@ const RoundSummary = ({
               label="Guess Movie"
               color="primary"
               className={classes.input}
+              variant="filled"
               value={movie}
               onChange={(e) => setMovie(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleGuessMovie()}
               autoComplete="off"
             />
-            {loading ? (
-              <CircularProgress className={classes.iconButton} />
-            ) : (
-              <IconButton
-                type="submit"
-                className={classes.iconButton}
-                onClick={handleGuessMovie}
-              >
-                <ChevronRightIcon color="primary" />
-              </IconButton>
-            )}
           </div>
         ) : (
-          <Typography className={classes.guessMovie}>
-            Correct Guess!!!
+          <Typography className={classes.correctGuess}>
+            Correct
           </Typography>
         ))}
-      <Table size="small">
+      <Table size="small" className={classes.summary}>
         <TableBody>
           {_.map(enrichData(currentDetails), (value, key) => (
-            <TableRow key={key}>
-              <TableCell component="th" scope="row">
+            <StyledTableRow key={key}>
+              <StyledTableCell component="th" scope="row">
                 {key}
-              </TableCell>
-              <TableCell>{value}</TableCell>
-            </TableRow>
+              </StyledTableCell>
+              <StyledTableCell>{value}</StyledTableCell>
+            </StyledTableRow>
           ))}
         </TableBody>
       </Table>

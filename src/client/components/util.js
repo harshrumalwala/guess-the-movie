@@ -9,7 +9,7 @@ export const calculateTimeLeft = (roundStartedAt) =>
       )
     : undefined;
 
-export const isRoundActive = (roundStartedAt) => {
+export const isRoundActive = (roundStartedAt, questions) => {
   const timeLeft = calculateTimeLeft(roundStartedAt);
-  return timeLeft > 0 && timeLeft <= 90;
+  return timeLeft > 0 && timeLeft <= 90 && questions <= 15;
 };

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import 'date-fns';
 import _ from 'lodash';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
@@ -36,16 +36,25 @@ const useStyles = makeStyles((theme) => ({
   questionFormControl: {
     marginTop: theme.spacing(2),
     marginLeft: theme.spacing(2),
-    minWidth: 250
+    minWidth: 250,
+    backgroundColor: 'white',
+    boxShadow:
+      '0 4px 8px 0 grey, 0 6px 20px 0 grey'
   },
   parameterFormControl: {
     marginTop: theme.spacing(2),
     marginLeft: theme.spacing(2),
-    minWidth: 120
+    minWidth: 120,
+    backgroundColor: 'white',
+    boxShadow:
+      '0 4px 8px 0 grey, 0 6px 20px 0 grey'
   },
   guessFormControl: {
     marginTop: theme.spacing(2),
-    marginLeft: theme.spacing(2)
+    marginLeft: theme.spacing(2),
+    backgroundColor: 'white',
+    boxShadow:
+      '0 4px 8px 0 grey, 0 6px 20px 0 grey'
   },
   collection: {
     width: 120
@@ -55,6 +64,12 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(2)
   }
 }));
+
+const StyledInputAdornment = withStyles((theme) => ({
+  positionEnd: {
+    marginTop: '16px'
+  }
+}))(InputAdornment);
 
 const RoundQuestion = ({
   setCurrentDetails,
@@ -280,7 +295,7 @@ const RoundQuestion = ({
 
   return (
     <>
-      <FormControl className={classes.questionFormControl}>
+      <FormControl variant="filled" className={classes.questionFormControl}>
         <InputLabel id="question-label">
           Question {guessListSize + 1}
         </InputLabel>
@@ -293,7 +308,7 @@ const RoundQuestion = ({
         </Select>
       </FormControl>
       {!isParameterDisabled && (
-        <FormControl className={classes.parameterFormControl}>
+        <FormControl variant="filled" className={classes.parameterFormControl}>
           <InputLabel id="parameter-label">Parameter</InputLabel>
           <Select
             id="parameter"
@@ -321,7 +336,9 @@ const RoundQuestion = ({
             style={{ minWidth: 200 }}
             value={guess}
             onChange={handleGuessChange}
-            renderInput={(params) => <TextField {...params} label="Guess" />}
+            renderInput={(params) => (
+              <TextField variant="filled" {...params} label="Guess" />
+            )}
           />
         </FormControl>
       )}
@@ -334,6 +351,7 @@ const RoundQuestion = ({
               autoOk
               openTo="year"
               variant="inline"
+              inputVariant="filled"
               format="MM/dd/yyyy"
               id="guess-date"
               label="Guess"
@@ -347,6 +365,7 @@ const RoundQuestion = ({
       {!isGuessFreeTextDisabled && (
         <FormControl className={classes.guessFormControl}>
           <TextField
+            variant="filled"
             className={classes.collection}
             autoComplete="off"
             id="guess-collection"
@@ -355,9 +374,11 @@ const RoundQuestion = ({
             onChange={handleCollectionChange}
             InputProps={{
               startAdornment: (
-                <InputAdornment position="start">$</InputAdornment>
+                <StyledInputAdornment position="start">$</StyledInputAdornment>
               ),
-              endAdornment: <InputAdornment position="end">MM</InputAdornment>
+              endAdornment: (
+                <StyledInputAdornment position="end">MM</StyledInputAdornment>
+              )
             }}
           />
         </FormControl>
@@ -365,15 +386,17 @@ const RoundQuestion = ({
       {(Number(guess) || !_.isEmpty(guess)) &&
         (!loading ? (
           <IconButton
-            color="primary"
             className={classes.checkButton}
             aria-label="Guess"
             onClick={handleVerifyGuess}
           >
-            <SendIcon />
+            <SendIcon style={{ color: 'red', fontSize: 'xx-large' }} />
           </IconButton>
         ) : (
-          <CircularProgress className={classes.checkButton} />
+          <CircularProgress
+            style={{ color: 'red' }}
+            className={classes.checkButton}
+          />
         ))}
     </>
   );

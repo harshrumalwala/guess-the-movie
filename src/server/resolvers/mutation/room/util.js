@@ -144,7 +144,7 @@ const updateRoomOnPlayerRoundComplete = (room, userId, hasCompletedRound) =>
     }
   };
 
-const updatePlayerNameOrScore = (userId, score, name) =>
+const updatePlayerNameOrScore = (currentScore = 0, userId, score, name) =>
   (score || name) && {
     players: {
       update: [
@@ -152,7 +152,7 @@ const updatePlayerNameOrScore = (userId, score, name) =>
           data: _.assign(
             {},
             score && {
-              score: score
+              score: currentScore + score
             },
             name && {
               name: name

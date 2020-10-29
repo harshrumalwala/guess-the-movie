@@ -7,11 +7,16 @@ import RoundList from '../roundList';
 import _ from 'lodash';
 import { isRoundActive } from 'client/components/util';
 import { useCurrentUser } from 'client/hooks';
+import movieTime from 'images/movieTime.png';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     marginLeft: theme.spacing(1),
-    flexGrow: 1
+    flexGrow: 1,
+    backgroundImage: `url(${movieTime})`,
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center'
   }
 }));
 
@@ -38,15 +43,16 @@ const RoundContainer = ({
   return (
     <div className={classes.root}>
       <RoundHeader round={round} roundLimit={roundLimit} timeLeft={timeLeft} />
-      {isRoundActive(roundStartedAt) && !hasCompletedRound && (
-        <RoundQuestion
-          guessListSize={_.size(guessList)}
-          currentDetails={currentDetails}
-          setCurrentDetails={setCurrentDetails}
-          setGuessList={setGuessList}
-          roundMovieId={roundMovieId}
-        />
-      )}
+      {isRoundActive(roundStartedAt, _.size(guessList)) &&
+        !hasCompletedRound && (
+          <RoundQuestion
+            guessListSize={_.size(guessList)}
+            currentDetails={currentDetails}
+            setCurrentDetails={setCurrentDetails}
+            setGuessList={setGuessList}
+            roundMovieId={roundMovieId}
+          />
+        )}
       <RoundList guessList={guessList} />
     </div>
   );

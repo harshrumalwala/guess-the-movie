@@ -9,6 +9,7 @@ type Query {
   languages: [Language!]!
   users: [User!]!
   rooms: [Room!]
+  movie(id: Int!): Movie
   isPersonInCast(id: Int!, person: String!): Boolean!
   isDirectedBy(id: Int!, person: String!): Boolean!
   isBoxOfficeCollectionGreaterThan(id: Int!, boxOffice: Float!): Boolean!

@@ -33,28 +33,30 @@ import { useVerifyGuess } from 'client/hooks';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   questionFormControl: {
     marginTop: theme.spacing(2),
     marginLeft: theme.spacing(2),
     minWidth: 250,
     backgroundColor: 'white',
-    boxShadow:
-      '0 4px 8px 0 grey, 0 6px 20px 0 grey'
+    boxShadow: '0 4px 8px 0 grey, 0 6px 20px 0 grey'
   },
   parameterFormControl: {
     marginTop: theme.spacing(2),
     marginLeft: theme.spacing(2),
     minWidth: 120,
     backgroundColor: 'white',
-    boxShadow:
-      '0 4px 8px 0 grey, 0 6px 20px 0 grey'
+    boxShadow: '0 4px 8px 0 grey, 0 6px 20px 0 grey'
   },
   guessFormControl: {
     marginTop: theme.spacing(2),
     marginLeft: theme.spacing(2),
     backgroundColor: 'white',
-    boxShadow:
-      '0 4px 8px 0 grey, 0 6px 20px 0 grey'
+    boxShadow: '0 4px 8px 0 grey, 0 6px 20px 0 grey'
   },
   collection: {
     width: 120
@@ -294,7 +296,7 @@ const RoundQuestion = ({
   };
 
   return (
-    <>
+    <div className={classes.root}>
       <FormControl variant="filled" className={classes.questionFormControl}>
         <InputLabel id="question-label">
           Question {guessListSize + 1}
@@ -398,7 +400,7 @@ const RoundQuestion = ({
             className={classes.checkButton}
           />
         ))}
-    </>
+    </div>
   );
 };
 

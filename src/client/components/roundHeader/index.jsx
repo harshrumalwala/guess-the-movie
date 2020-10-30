@@ -9,6 +9,7 @@ import ReplayIcon from '@material-ui/icons/Replay';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import Tooltip from '@material-ui/core/Tooltip';
 import { useUpdateRoom } from 'client/hooks';
+import { MAX_ROUND_TIME } from 'client/constants';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -50,7 +51,7 @@ const RoundHeader = ({ round, roundLimit, timeLeft, isSummary }) => {
     isSummary
       ? 'Summary'
       : round && round !== 0
-      ? timeLeft <= 90
+      ? timeLeft <= MAX_ROUND_TIME
         ? `Round ${round} of ${roundLimit}`
         : `Next round starting in`
       : `Waiting to start the game`;
@@ -61,9 +62,9 @@ const RoundHeader = ({ round, roundLimit, timeLeft, isSummary }) => {
         <Typography variant="h6" className={classes.title}>
           {getTitle()}
         </Typography>
-        {!isSummary && !isNaN(timeLeft) && timeLeft > 0 && (
+        {!isSummary && round !== 0 && !isNaN(timeLeft) && timeLeft > 0 && (
           <Typography variant="h6" className={classes.rightAlignedIcon}>
-            {timeLeft > 90 ? timeLeft - 90 : timeLeft}
+            {timeLeft > MAX_ROUND_TIME ? timeLeft - MAX_ROUND_TIME : timeLeft}
           </Typography>
         )}
         {!isSummary && round === 0 && (

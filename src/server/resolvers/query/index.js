@@ -1,4 +1,5 @@
 const {
+  movie,
   movies,
   persons,
   directors,
@@ -20,6 +21,7 @@ const {
 } = require('./filter');
 
 module.exports = {
+  movie,
   movies,
   persons,
   directors,

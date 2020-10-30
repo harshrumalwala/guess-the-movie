@@ -9,6 +9,14 @@ const movies = async (parents, args, context) =>
     include: includeNestedMovieAttributes()
   });
 
+const movie = async (parents, args, context) =>
+  await context.prisma.movie.findOne({
+    where: {
+      id: args.id
+    },
+    include: includeNestedMovieAttributes()
+  });
+
 const persons = async (parents, args, context) =>
   await context.prisma.person.findMany({
     include: {
@@ -69,6 +77,7 @@ const rooms = async (parents, args, context) =>
 
 module.exports = {
   movies,
+  movie,
   persons,
   directors,
   cast,

@@ -47,7 +47,7 @@ export const GET_LANGUAGES = gql`
 `;
 
 export const GET_GENRES = gql`
-  query GetMovies {
+  query GetGenres {
     genres {
       name
     }

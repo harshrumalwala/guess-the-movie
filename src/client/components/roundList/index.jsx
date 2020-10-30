@@ -11,7 +11,7 @@ import { green, red } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(1),
     flexGrow: 1,
     maxHeight: '73vh',
     overflowY: 'auto'

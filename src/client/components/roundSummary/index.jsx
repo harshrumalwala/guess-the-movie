@@ -6,14 +6,14 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import TextField from '@material-ui/core/TextField';
 import { gql, useLazyQuery } from '@apollo/react-hooks';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import { isRoundActive } from 'client/components/util';
 import titanic from 'images/titanic.jpg';
+import Fab from '@material-ui/core/Fab';
+import CheckIcon from '@material-ui/icons/Check';
+import { green } from '@material-ui/core/colors';
+import { usePrevious } from 'client/hooks';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,22 +30,20 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: 'white',
     boxShadow: '0 4px 8px 0 grey, 0 6px 20px 0 lightSalmon'
   },
-  correctGuess: {
-    margin: theme.spacing(2),
-    borderRadius: '10px',
-    height: '40px',
-    backgroundColor: 'limegreen',
-    color:'black',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    boxShadow: '0 2px 4px 0 grey, 0 5px 10px 0 lightSalmon'
-  },
   input: {
     flex: 1
   },
   summary: {
-    marginTop: theme.spacing(3)
+    marginTop: theme.spacing(2)
+  },
+  buttonSuccess: {
+    backgroundColor: green[500],
+    color: 'white'
+  },
+  success: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: theme.spacing(2)
   }
 }));
 
@@ -131,19 +129,30 @@ const RoundSummary = ({
   roundStartedAt,
   timeLeft,
   round,
-  guessList
+  guessList,
+  setPenalty,
+  penalty,
+  prevRound
 }) => {
   const classes = useStyles();
   const [movie, setMovie] = useState('');
   const [checkMovie, { loading, data }] = useLazyQuery(CHECK_MOVIE);
+  const prevLoading = usePrevious(loading);
 
   useEffect(() => {
-    if (timeLeft === 90) {
+    if (round !== prevRound) {
       checkMovie({
         variables: { id: 1, name: 'movie' }
       });
     }
-  }, [timeLeft, checkMovie]);
+  }, [timeLeft, checkMovie, prevRound, round]);
+
+  useEffect(() => {
+    prevLoading &&
+      !loading &&
+      !data?.isMovie &&
+      setPenalty((penalty) => penalty + 1);
+  }, [loading, prevLoading, setPenalty, data]);
 
   useEffect(() => {
     if (data?.isMovie === true) {
@@ -164,7 +173,7 @@ const RoundSummary = ({
   return (
     <div className={classes.root}>
       <RoundHeader isSummary={true} round={round} />
-      {isRoundActive(roundStartedAt, _.size(guessList)) &&
+      {isRoundActive(roundStartedAt, penalty) &&
         (!data?.isMovie ? (
           <div className={classes.guessMovie}>
             <TextField
@@ -180,9 +189,11 @@ const RoundSummary = ({
             />
           </div>
         ) : (
-          <Typography className={classes.correctGuess}>
-            Correct
-          </Typography>
+          <div className={classes.success}>
+            <Fab aria-label="correct" className={classes.buttonSuccess}>
+              <CheckIcon />
+            </Fab>
+          </div>
         ))}
       <Table size="small" className={classes.summary}>
         <TableBody>

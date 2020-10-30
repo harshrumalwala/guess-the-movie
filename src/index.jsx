@@ -63,16 +63,14 @@ const client = new ApolloClient({
 });
 
 ReactDOM.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <ApolloProvider client={client}>
-        <CurrentUserProvider>
-          <AppHeader />
-          <Routes />
-        </CurrentUserProvider>
-      </ApolloProvider>
-    </BrowserRouter>
-  </React.StrictMode>,
+  <BrowserRouter>
+    <ApolloProvider client={client}>
+      <CurrentUserProvider>
+        <AppHeader />
+        <Routes />
+      </CurrentUserProvider>
+    </ApolloProvider>
+  </BrowserRouter>,
   document.getElementById('root')
 );
 

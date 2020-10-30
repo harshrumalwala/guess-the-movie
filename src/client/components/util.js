@@ -1,15 +1,18 @@
-export const calculateTimeLeft = (roundStartedAt) =>
+import { MAX_ROUND_TIME, ROUND_BUFFER, TIME_PENALTY } from 'client/constants';
+
+export const calculateTimeLeft = (roundStartedAt, penalty) =>
   roundStartedAt
     ? Math.max(
-        90 -
+        MAX_ROUND_TIME -
           (Math.floor(new Date().getTime() / 1000) -
             Math.floor(new Date(roundStartedAt).getTime() / 1000) -
-            10),
+            ROUND_BUFFER +
+            TIME_PENALTY * penalty),
         -1
       )
     : undefined;
 
-export const isRoundActive = (roundStartedAt, questions) => {
-  const timeLeft = calculateTimeLeft(roundStartedAt);
-  return timeLeft > 0 && timeLeft <= 90 && questions <= 15;
+export const isRoundActive = (roundStartedAt, penalty) => {
+  const timeLeft = calculateTimeLeft(roundStartedAt, penalty);
+  return timeLeft > 0 && timeLeft <= MAX_ROUND_TIME;
 };

@@ -15,7 +15,7 @@ const useStyles = makeStyles({
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
     backgroundSize: 'cover',
-    width: '18%'
+    width: '20%'
   }
 });
 

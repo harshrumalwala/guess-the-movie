@@ -7,6 +7,29 @@ import { useCurrentUser } from 'client/hooks';
 import { Button } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import { ListRooms } from 'client/components';
+import BackgroundSlider from 'react-background-slider';
+import {
+  inception,
+  joker,
+  toyStory,
+  ramleela,
+  wolfOfWallStreet,
+  wonderWoman,
+  annabelle,
+  threeIdiots,
+  aladdin,
+  bossBaby,
+  bahubali,
+  matrix,
+  deadpool,
+  ddlj,
+  conjuring,
+  findingNemo,
+  avatar,
+  harryPotter,
+  lalaland,
+  frozen
+} from 'images';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -31,30 +54,55 @@ const Home = () => {
 
   return (
     <>
-    <Container maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.container}>
-        <Typography component="h1" variant="h5">
-          Home
-        </Typography>
-        {token && (
-          <>
-            <span>User is logged in</span>
-            <ListRooms>
-            </ListRooms> 
-            <Button
-              onClick={handleJoinRoom}
-              variant="contained"
-              color="primary"
-              className={classes.joinRoom}
-            >
-              Join Room
-            </Button>
-          </>
-        )}
-      </div>
-    </Container>     
-  </>
+      <BackgroundSlider
+        images={[
+          inception,
+          joker,
+          toyStory,
+          ramleela,
+          wolfOfWallStreet,
+          wonderWoman,
+          annabelle,
+          threeIdiots,
+          aladdin,
+          bossBaby,
+          bahubali,
+          matrix,
+          deadpool,
+          ddlj,
+          conjuring,
+          findingNemo,
+          avatar,
+          harryPotter,
+          lalaland,
+          frozen
+        ]}
+        duration={2}
+        transition={1}
+      />
+      <Container maxWidth="xs">
+        <CssBaseline />
+        <div className={classes.container}>
+          <Typography component="h1" variant="h5">
+            Home
+          </Typography>
+          {token && (
+            <>
+              <span>User is logged in</span>
+              <ListRooms></ListRooms>
+              <Button
+                onClick={handleJoinRoom}
+                variant="contained"
+                color="primary"
+                className={classes.joinRoom}
+              >
+                Join Room
+              </Button>
+            </>
+          )}
+        </div>
+      </Container>
+    </>
   );
 };
 

@@ -77,8 +77,8 @@ const Home = () => {
           lalaland,
           frozen
         ]}
-        duration={2}
-        transition={1}
+        duration={10}
+        transition={2}
       />
       <Container maxWidth="xs">
         <CssBaseline />

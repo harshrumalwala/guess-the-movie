@@ -1,43 +1,43 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import "./index.css";
-import * as serviceWorker from "./serviceWorker";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { ApolloProvider } from "@apollo/react-hooks";
-import { CurrentUserProvider } from "client/hooks";
-import Routes from "client/routes";
-import { BrowserRouter } from "react-router-dom";
-import { AppHeader } from "client/components";
-import { WebSocketLink } from "@apollo/client/link/ws";
-import { split, HttpLink, ApolloClient, InMemoryCache } from "@apollo/client";
-import { getMainDefinition } from "@apollo/client/utilities";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import * as serviceWorker from './serviceWorker';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { ApolloProvider } from '@apollo/react-hooks';
+import { CurrentUserProvider } from 'client/hooks';
+import Routes from 'client/routes';
+import { BrowserRouter } from 'react-router-dom';
+import { AppHeader } from 'client/components';
+import { WebSocketLink } from '@apollo/client/link/ws';
+import { split, HttpLink, ApolloClient, InMemoryCache } from '@apollo/client';
+import { getMainDefinition } from '@apollo/client/utilities';
 
-const token = localStorage.getItem("token");
-const isHttps = () => window.location.protocol.includes("s");
+const token = localStorage.getItem('token');
+const isHttps = () => window.location.protocol.includes('s');
 
 const httpLink = new HttpLink({
   uri:
-    process.env.NODE_ENV !== "production"
-      ? "http://localhost:5000/graphql"
-      : "/graphql",
+    process.env.NODE_ENV !== 'production'
+      ? 'http://localhost:5000/graphql'
+      : '/graphql',
   headers: {
-    Authorization: `Bearer ${token ? token : ""}`,
-  },
+    Authorization: `Bearer ${token ? token : ''}`
+  }
 });
 
 const wsLink = new WebSocketLink({
   uri:
-    process.env.NODE_ENV !== "production"
-      ? "ws://localhost:5000/subscriptions"
-      : `${isHttps() ? "wss" : "ws"}://${window.location.host}/subscriptions`,
+    process.env.NODE_ENV !== 'production'
+      ? 'ws://localhost:5000/subscriptions'
+      : `${isHttps() ? 'wss' : 'ws'}://${window.location.host}/subscriptions`,
   options: {
     reconnect: true,
     connectionParams: {
       headers: {
-        Authorization: `Bearer ${token ? token : ""}`,
-      },
-    },
-  },
+        Authorization: `Bearer ${token ? token : ''}`
+      }
+    }
+  }
 });
 
 // The split function takes three parameters:
@@ -49,8 +49,8 @@ const link = split(
   ({ query }) => {
     const definition = getMainDefinition(query);
     return (
-      definition.kind === "OperationDefinition" &&
-      definition.operation === "subscription"
+      definition.kind === 'OperationDefinition' &&
+      definition.operation === 'subscription'
     );
   },
   wsLink,
@@ -59,21 +59,19 @@ const link = split(
 
 const client = new ApolloClient({
   link,
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache()
 });
 
 ReactDOM.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <ApolloProvider client={client}>
-        <CurrentUserProvider>
-          <AppHeader />
-          <Routes />
-        </CurrentUserProvider>
-      </ApolloProvider>
-    </BrowserRouter>
-  </React.StrictMode>,
-  document.getElementById("root")
+  <BrowserRouter>
+    <ApolloProvider client={client}>
+      <CurrentUserProvider>
+        <AppHeader />
+        <Routes />
+      </CurrentUserProvider>
+    </ApolloProvider>
+  </BrowserRouter>,
+  document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change

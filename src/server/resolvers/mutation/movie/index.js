@@ -47,7 +47,7 @@ const addMovie = async (parent, args, context) => {
           }
         }))
       },
-      releaseDate: new Date(args.releaseDate),
+      releaseDate: (new Date(args.releaseDate)).toISOString(),
       boxOffice: args.boxOffice,
     },
     include: includeNestedMovieAttributes()
@@ -109,10 +109,10 @@ const updateMovie = async (parent, args, context) => {
       }
     },
     args.releaseDate && {
-      releaseDate: new Date(args.releaseDate),
+      releaseDate: (new Date(args.releaseDate)).toISOString(),
     },
     args.boxOffice && {
-      boxOffice: new Date(args.boxOffice),
+      boxOffice: args.boxOffice,
     }
   );
   const updatedMovie = await context.prisma.movie.update({

@@ -1,5 +1,5 @@
-import { useParams } from "react-router-dom";
-import { gql, useSubscription } from "@apollo/react-hooks";
+import { useParams } from 'react-router-dom';
+import { gql, useSubscription } from '@apollo/react-hooks';
 
 const ROOM_SUBSCRIPTION = gql`
   subscription OnRoomUpdate($id: ID!) {
@@ -7,7 +7,7 @@ const ROOM_SUBSCRIPTION = gql`
       round
       roundLimit
       roundMovieId
-      language {
+      languages {
         name
       }
       players {
@@ -21,6 +21,7 @@ const ROOM_SUBSCRIPTION = gql`
       host {
         id
       }
+      roundStartedAt
     }
   }
 `;
@@ -28,7 +29,7 @@ const ROOM_SUBSCRIPTION = gql`
 const useRoom = () => {
   const { roomId } = useParams();
   const { data, loading } = useSubscription(ROOM_SUBSCRIPTION, {
-    variables: { id: roomId },
+    variables: { id: roomId }
   });
 
   return { loading, data };

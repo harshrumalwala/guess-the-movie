@@ -40,7 +40,7 @@ model Language {
   id     Int     @id @default(autoincrement())
   name   String  @unique
   movies Movie[] @relation("LanguageMapping")
-  rooms  Room[]
+  rooms  Room[]  @relation("RoomLanguageMapping")
 }
 
 model User {
@@ -57,15 +57,15 @@ model User {
 }
 
 model Room {
-  id             String    @id @default(uuid())
-  createdAt      DateTime  @default(now())
-  players        User[]    @relation("PlayerMapping")
-  host           User?     @relation("HostMapping")
+  id             String     @id @default(uuid())
+  createdAt      DateTime   @default(now())
+  players        User[]     @relation("PlayerMapping")
+  host           User?      @relation("HostMapping")
   round          Int
   roundLimit     Int
+  roundStartedAt DateTime?
   roundCompleted User[]
   roundMovieId   Int?
-  language       Language? @relation(fields: [languageId], references: [id])
-  languageId     Int?
-  movies         Movie[]   @relation("RoomMapping")
+  languages       Language[] @relation("RoomLanguageMapping")
+  movies         Movie[]    @relation("RoomMapping")
 }

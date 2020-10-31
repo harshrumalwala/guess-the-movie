@@ -1,4 +1,4 @@
-import { gql, useMutation } from "@apollo/react-hooks";
+import { gql, useMutation } from '@apollo/react-hooks';
 
 const UPDATE_ROOM = gql`
   mutation OnRoomUpdate(
@@ -22,9 +22,6 @@ const UPDATE_ROOM = gql`
       round
       roundLimit
       roundMovieId
-      language {
-        name
-      }
       players {
         id
         name

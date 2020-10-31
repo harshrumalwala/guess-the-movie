@@ -1,11 +1,11 @@
-import React, { lazy, Suspense } from "react";
-import { Route, Switch } from "react-router-dom";
-import { Loader } from "client/components";
+import React, { lazy, Suspense } from 'react';
+import { Route, Switch } from 'react-router-dom';
+import { Loader } from 'client/components';
 
-const Home = lazy(() => import("client/pages/home"));
-const Login = lazy(() => import("client/pages/login"));
-const Profile = lazy(() => import("client/pages/profile"));
-const Room = lazy(() => import("client/pages/room"));
+const Home = lazy(() => import('client/pages/home'));
+const Login = lazy(() => import('client/pages/login'));
+const Profile = lazy(() => import('client/pages/profile'));
+const Room = lazy(() => import('client/pages/room'));
 
 const Routes = () => (
   <Switch>

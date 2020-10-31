@@ -14,6 +14,7 @@ import Fab from '@material-ui/core/Fab';
 import CheckIcon from '@material-ui/icons/Check';
 import { green } from '@material-ui/core/colors';
 import { usePrevious } from 'client/hooks';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,6 +45,10 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
     marginTop: theme.spacing(2)
+  },
+  loader: {
+    height: '56px',
+    width: '100%'
   }
 }));
 
@@ -128,11 +133,12 @@ const RoundSummary = ({
   onRoundComplete,
   roundStartedAt,
   timeLeft,
+  isGuessed,
   round,
-  guessList,
   setPenalty,
   penalty,
-  prevRound
+  prevRound,
+  hasAllCompletedRound
 }) => {
   const classes = useStyles();
   const [movie, setMovie] = useState('');
@@ -155,9 +161,7 @@ const RoundSummary = ({
   }, [loading, prevLoading, setPenalty, data]);
 
   useEffect(() => {
-    if (data?.isMovie === true) {
-      onRoundComplete(true);
-    }
+    data?.isMovie && onRoundComplete(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
@@ -173,9 +177,9 @@ const RoundSummary = ({
   return (
     <div className={classes.root}>
       <RoundHeader isSummary={true} round={round} />
-      {isRoundActive(roundStartedAt, penalty) &&
-        (!data?.isMovie ? (
-          <div className={classes.guessMovie}>
+      {isRoundActive(roundStartedAt, penalty, isGuessed) && (
+        <div className={classes.guessMovie}>
+          {!loading ? (
             <TextField
               id="guess-movie"
               label="Guess Movie"
@@ -186,15 +190,20 @@ const RoundSummary = ({
               onChange={(e) => setMovie(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleGuessMovie()}
               autoComplete="off"
+              autoFocus={true}
             />
-          </div>
-        ) : (
-          <div className={classes.success}>
-            <Fab aria-label="correct" className={classes.buttonSuccess}>
-              <CheckIcon />
-            </Fab>
-          </div>
-        ))}
+          ) : (
+            <LinearProgress className={classes.loader} />
+          )}
+        </div>
+      )}
+      {data?.isMovie && !hasAllCompletedRound && (
+        <div className={classes.success}>
+          <Fab aria-label="correct" className={classes.buttonSuccess}>
+            <CheckIcon />
+          </Fab>
+        </div>
+      )}
       <Table size="small" className={classes.summary}>
         <TableBody>
           {_.map(enrichData(currentDetails), (value, key) => (

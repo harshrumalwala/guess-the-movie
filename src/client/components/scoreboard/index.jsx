@@ -14,11 +14,8 @@ const useStyles = makeStyles({
     backgroundImage: `url(${birdsOfPrey})`,
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
-    backgroundSize: 'cover'
-  },
-  table: {
-    width: '18%',
-    minWidth: '275px'
+    backgroundSize: 'cover',
+    width: '18%'
   }
 });
 
@@ -58,7 +55,7 @@ const Scoreboard = ({ players, roundCompleted }) => {
 
   return (
     <div className={classes.root}>
-      <TableContainer className={classes.table}>
+      <TableContainer>
         <Table stickyHeader>
           <TableHead>
             <StyledTableRow>

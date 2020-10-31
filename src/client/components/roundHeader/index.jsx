@@ -32,7 +32,14 @@ const StyledToolbar = withStyles((theme) => ({
   }
 }))(Toolbar);
 
-const RoundHeader = ({ round, roundLimit, timeLeft, isSummary }) => {
+const RoundHeader = ({
+  round,
+  roundLimit,
+  timeLeft,
+  isSummary,
+  isGuessed,
+  hasAllCompletedRound
+}) => {
   const classes = useStyles();
   const { roomId } = useParams();
   const { updateRoom } = useUpdateRoom();
@@ -51,7 +58,11 @@ const RoundHeader = ({ round, roundLimit, timeLeft, isSummary }) => {
     isSummary
       ? 'Summary'
       : round && round !== 0
-      ? timeLeft <= MAX_ROUND_TIME
+      ? round === roundLimit && hasAllCompletedRound
+        ? 'I knew it was only a matter of time. Well done!'
+        : isGuessed
+        ? 'Waiting for other players to finish'
+        : timeLeft >= 0 && timeLeft <= MAX_ROUND_TIME
         ? `Round ${round} of ${roundLimit}`
         : `Next round starting in`
       : `Waiting to start the game`;

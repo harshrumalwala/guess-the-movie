@@ -6,7 +6,6 @@ import RoundQuestion from '../roundQuestion';
 import RoundList from '../roundList';
 import _ from 'lodash';
 import { isRoundActive } from 'client/components/util';
-import { useCurrentUser } from 'client/hooks';
 import movieTime from 'images/movieTime.png';
 import Typography from '@material-ui/core/Typography';
 import { gql, useQuery } from '@apollo/react-hooks';
@@ -48,7 +47,6 @@ const RoundContainer = ({
   round,
   roundLimit,
   roundMovieId,
-  roundCompleted,
   roundStartedAt,
   currentDetails,
   setCurrentDetails,
@@ -56,27 +54,26 @@ const RoundContainer = ({
   setGuessList,
   timeLeft,
   penalty,
-  displayMovieId
+  displayMovieId,
+  isGuessed,
+  hasAllCompletedRound
 }) => {
   const classes = useStyles();
-  const { userId } = useCurrentUser();
-  const hasCompletedRound =
-    _.chain(roundCompleted)
-      .filter(['id', parseInt(userId)])
-      .size()
-      .value() > 0;
   const { data } = useQuery(GET_MOVIE, {
     variables: { id: displayMovieId ?? 0 }
   });
 
-  console.log(timeLeft, displayMovieId, data);
-
   return (
     <div className={classes.root}>
-      <RoundHeader round={round} roundLimit={roundLimit} timeLeft={timeLeft} />
-      {isRoundActive(roundStartedAt, penalty) &&
-        _.size(guessList) < MAX_GUESSES &&
-        !hasCompletedRound && (
+      <RoundHeader
+        round={round}
+        roundLimit={roundLimit}
+        timeLeft={timeLeft}
+        isGuessed={isGuessed}
+        hasAllCompletedRound={hasAllCompletedRound}
+      />
+      {isRoundActive(roundStartedAt, penalty, isGuessed) &&
+        _.size(guessList) < MAX_GUESSES && (
           <RoundQuestion
             guessListSize={_.size(guessList)}
             currentDetails={currentDetails}
@@ -86,7 +83,7 @@ const RoundContainer = ({
           />
         )}
       {((round !== 1 && timeLeft > MAX_ROUND_TIME) ||
-        (timeLeft <= 0 && round === roundLimit)) && (
+        (hasAllCompletedRound && round === roundLimit)) && (
         <div className={classes.movieRoot}>
           <Typography className={classes.movieCard} component="h3">
             The movie was{' '}

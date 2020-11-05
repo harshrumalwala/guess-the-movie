@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useState, useEffect } from 'react';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -25,12 +25,30 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+const StyledAppBar = withStyles((theme) => ({
+  colorPrimary: {
+    color: 'gold',
+    backgroundImage: 'linear-gradient(to right, #a5204a  , #1d2671)'
+  }
+}))(AppBar);
+
 const AppHeader = () => {
   const classes = useStyles();
   const { token, setToken, setUserId } = useCurrentUser();
   const [anchorEl, setAnchorEl] = useState(null);
   const history = useHistory();
   const client = useApolloClient();
+
+  useEffect(() => {
+    const cleanup = () => sessionStorage.clear();
+
+    window.addEventListener('beforeunload', cleanup);
+
+    return () => {
+      cleanup();
+      window.removeEventListener('beforeunload', cleanup);
+    };
+  }, []);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -50,7 +68,7 @@ const AppHeader = () => {
     setToken(null);
     setUserId(null);
     client.resetStore();
-    localStorage.clear();
+    sessionStorage.clear();
     redirectToHome();
   };
 
@@ -65,7 +83,7 @@ const AppHeader = () => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <StyledAppBar position="static">
         <Toolbar>
           <Typography
             variant="h6"
@@ -110,7 +128,7 @@ const AppHeader = () => {
             </Button>
           )}
         </Toolbar>
-      </AppBar>
+      </StyledAppBar>
     </div>
   );
 };

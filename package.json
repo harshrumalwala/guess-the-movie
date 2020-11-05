@@ -16,7 +16,6 @@
     "@material-ui/pickers": "^3.2.10",
     "@prisma/cli": "^2.7.1",
     "@prisma/client": "2.7.1",
-    "bootstrap": "^4.5.3",
     "concurrently": "^5.3.0",
     "cors": "^2.8.5",
     "date-fns": "^2.16.1",
@@ -32,6 +31,7 @@
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.0",
+    "react-swipeable-views": "^0.13.9",
     "subscriptions-transport-ws": "^0.9.18"
   },
   "scripts": {

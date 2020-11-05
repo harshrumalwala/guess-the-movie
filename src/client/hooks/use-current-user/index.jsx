@@ -1,8 +1,8 @@
 import React, { useState, createContext, useContext } from 'react';
 
 const INITIAL_STATE = {
-  token: process.env.REACT_APP_USER_TOKEN,
-  userId: process.env.REACT_APP_USER_ID,
+  token: null,
+  userId: null,
   setToken: null,
   setUserId: null
 };
@@ -10,8 +10,8 @@ const INITIAL_STATE = {
 const CurrentUserContext = createContext(INITIAL_STATE);
 
 export const CurrentUserProvider = ({ children }) => {
-  const [token, setToken] = useState(process.env.REACT_APP_USER_TOKEN);
-  const [userId, setUserId] = useState(process.env.REACT_APP_USER_ID);
+  const [token, setToken] = useState();
+  const [userId, setUserId] = useState();
 
   return (
     <CurrentUserContext.Provider

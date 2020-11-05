@@ -56,7 +56,8 @@ const RoundContainer = ({
   penalty,
   displayMovieId,
   isGuessed,
-  hasAllCompletedRound
+  hasAllCompletedRound,
+  host
 }) => {
   const classes = useStyles();
   const { data } = useQuery(GET_MOVIE, {
@@ -71,6 +72,7 @@ const RoundContainer = ({
         timeLeft={timeLeft}
         isGuessed={isGuessed}
         hasAllCompletedRound={hasAllCompletedRound}
+        host={host}
       />
       {isRoundActive(roundStartedAt, penalty, isGuessed) &&
         _.size(guessList) < MAX_GUESSES && (

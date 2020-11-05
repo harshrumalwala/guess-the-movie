@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { CurrentUserProvider } from 'client/hooks';
 import Routes from 'client/routes';
@@ -11,18 +10,27 @@ import { AppHeader } from 'client/components';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { split, HttpLink, ApolloClient, InMemoryCache } from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
+import BackgroundSlider from 'react-background-slider';
+import { BACKGROUND_IMAGES } from 'client/constants';
+import { setContext } from '@apollo/client/link/context';
 
-const token = localStorage.getItem('token');
 const isHttps = () => window.location.protocol.includes('s');
+
+const authLink = setContext((_, { headers }) => {
+  const token = sessionStorage.getItem('token');
+  return {
+    headers: {
+      ...headers,
+      Authorization: token ? `Bearer ${token}` : "",
+    }
+  }
+});
 
 const httpLink = new HttpLink({
   uri:
     process.env.NODE_ENV !== 'production'
       ? 'http://localhost:5000/graphql'
-      : '/graphql',
-  headers: {
-    Authorization: `Bearer ${token ? token : ''}`
-  }
+      : '/graphql'
 });
 
 const wsLink = new WebSocketLink({
@@ -31,20 +39,10 @@ const wsLink = new WebSocketLink({
       ? 'ws://localhost:5000/subscriptions'
       : `${isHttps() ? 'wss' : 'ws'}://${window.location.host}/subscriptions`,
   options: {
-    reconnect: true,
-    connectionParams: {
-      headers: {
-        Authorization: `Bearer ${token ? token : ''}`
-      }
-    }
+    reconnect: true
   }
 });
 
-// The split function takes three parameters:
-//
-// * A function that's called for each operation to execute
-// * The Link to use for an operation if the function returns a "truthy" value
-// * The Link to use for an operation if the function returns a "falsy" value
 const link = split(
   ({ query }) => {
     const definition = getMainDefinition(query);
@@ -58,7 +56,7 @@ const link = split(
 );
 
 const client = new ApolloClient({
-  link,
+  link: authLink.concat(link),
   cache: new InMemoryCache()
 });
 
@@ -66,6 +64,11 @@ ReactDOM.render(
   <BrowserRouter>
     <ApolloProvider client={client}>
       <CurrentUserProvider>
+      <BackgroundSlider
+        images={BACKGROUND_IMAGES}
+        duration={10}
+        transition={2}
+      />
         <AppHeader />
         <Routes />
       </CurrentUserProvider>

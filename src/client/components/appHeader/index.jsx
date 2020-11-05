@@ -85,7 +85,7 @@ const AppHeader = () => {
             className={classes.title}
             onClick={redirectToHome}
           >
-            Guess The Movie
+            Guess This Movie
           </Typography>
           {token ? (
             <div>

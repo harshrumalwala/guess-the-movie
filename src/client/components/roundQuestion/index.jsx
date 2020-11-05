@@ -228,16 +228,16 @@ const RoundQuestion = ({
     if (!isGuessDisabled) {
       switch (question) {
         case 0:
-          setGuessValues(_.map(languagesData.languages, 'name'));
+          setGuessValues(_.map(languagesData.languages, 'name').sort());
           break;
         case 1:
-          setGuessValues(_.map(directorsData.directors, 'name'));
+          setGuessValues(_.map(directorsData.directors, 'name').sort());
           break;
         case 2:
-          setGuessValues(_.map(castData.cast, 'name'));
+          setGuessValues(_.map(castData.cast, 'name').sort());
           break;
         case 3:
-          setGuessValues(_.map(genresData.genres, 'name'));
+          setGuessValues(_.map(genresData.genres, 'name').sort());
           break;
         default:
           setGuessValues([]);

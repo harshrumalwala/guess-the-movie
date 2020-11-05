@@ -16,6 +16,7 @@ import {
   PENDING_TIME_SCORE,
   MAX_GUESSES
 } from 'client/constants';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 const Room = () => {
   const classes = useStyles();
   const { roomId } = useParams();
-  const { userId } = useCurrentUser();
+  const { userId, token } = useCurrentUser();
   const [currentDetails, setCurrentDetails] = useState();
   const [displayMovieId, setDisplayMovieId] = useState();
   const [guessList, setGuessList] = useState([]);
@@ -46,13 +47,28 @@ const Room = () => {
     _.size(watchRoom?.players) === _.size(watchRoom?.roundCompleted);
   const prevRound = usePrevious(watchRoom?.round);
   const prevRoundMovieId = usePrevious(watchRoom?.roundMovieId);
+  const history = useHistory();
+  
+  useEffect(() => {
+    if (!token) {
+      history.push('/login');
+    } else if (
+      watchRoom?.round &&
+      watchRoom?.round > 0 &&
+      (!watchRoom?.host || !_.includes(_.map(watchRoom?.players, 'id'), userId))
+    ) {
+      history.push('/');
+    }
+  });
 
   useEffect(() => {
-    updateRoom({
-      variables: { id: roomId }
-    });
+    token &&
+      updateRoom({
+        variables: { id: roomId }
+      });
 
     const cleanup = () =>
+      token &&
       updateRoom({
         variables: { id: roomId, hasPlayerLeft: true }
       });
@@ -169,6 +185,7 @@ const Room = () => {
         displayMovieId={displayMovieId}
         isGuessed={isGuessed}
         hasAllCompletedRound={hasAllCompletedRound}
+        host={watchRoom?.host}
       />
       <RoundSummary
         currentDetails={currentDetails}
@@ -182,6 +199,7 @@ const Room = () => {
         penalty={penalty}
         isGuessed={isGuessed}
         hasAllCompletedRound={hasAllCompletedRound}
+        host={watchRoom?.host}
       />
     </div>
   );

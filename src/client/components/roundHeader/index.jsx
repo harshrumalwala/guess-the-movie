@@ -10,6 +10,7 @@ import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import Tooltip from '@material-ui/core/Tooltip';
 import { useUpdateRoom } from 'client/hooks';
 import { MAX_ROUND_TIME } from 'client/constants';
+import { useCurrentUser } from 'client/hooks/use-current-user';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -22,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 
 const StyledAppBar = withStyles((theme) => ({
   colorSecondary: {
-    backgroundColor: 'darkmagenta'
+    backgroundImage: 'linear-gradient(to top, #cc208e 0%, #6713d2 100%)'
   }
 }))(AppBar);
 
@@ -38,21 +39,29 @@ const RoundHeader = ({
   timeLeft,
   isSummary,
   isGuessed,
-  hasAllCompletedRound
+  hasAllCompletedRound,
+  host
 }) => {
   const classes = useStyles();
   const { roomId } = useParams();
   const { updateRoom } = useUpdateRoom();
+  const { userId } = useCurrentUser();
 
-  const onRoundRestart = () =>
+  console.log(userId, host);
+
+  const onRoundRestart = (e) => {
+    e.preventDefault();
     updateRoom({
       variables: { id: roomId, isGameRestarted: true }
     });
+  };
 
-  const onGameStart = () =>
+  const onGameStart = (e) => {
+    e.preventDefault();
     updateRoom({
       variables: { id: roomId, isGameReady: true }
     });
+  };
 
   const getTitle = () =>
     isSummary
@@ -78,14 +87,14 @@ const RoundHeader = ({
             {timeLeft > MAX_ROUND_TIME ? timeLeft - MAX_ROUND_TIME : timeLeft}
           </Typography>
         )}
-        {!isSummary && round === 0 && (
+        {!isSummary && round === 0 && host?.id === userId && (
           <Tooltip title="Start Game">
             <IconButton onClick={onGameStart}>
               <PlayArrowIcon style={{ color: 'white' }} />
             </IconButton>
           </Tooltip>
         )}
-        {isSummary && round !== 0 && (
+        {isSummary && round !== 0 && host?.id === userId && (
           <Tooltip title="Restart Game">
             <IconButton onClick={onRoundRestart}>
               <ReplayIcon style={{ color: 'white' }} />

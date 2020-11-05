@@ -9,7 +9,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { gql, useMutation } from '@apollo/react-hooks';
-import { useCurrentUser } from 'client/hooks';
+import { useCurrentUser, usePrevious } from 'client/hooks';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -26,6 +26,10 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     marginTop: theme.spacing(1)
   },
+  input: {
+    backgroundColor: 'white',
+    boxShadow: '0 4px 8px 0 grey, 0 6px 20px 0 black'
+  },
   submit: {
     margin: theme.spacing(3, 0, 2)
   }
@@ -35,6 +39,9 @@ const LOGIN_USER = gql`
   mutation Login($name: String!) {
     login(name: $name) {
       token
+      user {
+        id
+      }
     }
   }
 `;
@@ -43,17 +50,18 @@ const Login = () => {
   const classes = useStyles();
   const history = useHistory();
   const [userName, setUserName] = useState('');
-  const [loginUser, { data }] = useMutation(LOGIN_USER);
+  const [loginUser, { loading, data }] = useMutation(LOGIN_USER);
   const { setToken, setUserId } = useCurrentUser();
+  const prevLoading = usePrevious(loading);
 
   useEffect(() => {
-    if (data) {
-      setToken(data.login.token);
-      setUserId(data.login.id);
-      localStorage.setItem('token', data.login.token);
+    if (prevLoading && !loading) {
+      setToken(data?.login?.token);
+      setUserId(data?.login?.user.id);
+      sessionStorage.setItem('token', data.login.token);
       history.push('/');
     }
-  }, [data, setToken, setUserId, history]);
+  }, [data, setToken, setUserId, history, loading, prevLoading]);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -70,7 +78,7 @@ const Login = () => {
         </Avatar>
         <form className={classes.form} noValidate>
           <TextField
-            variant="outlined"
+            variant="filled"
             margin="normal"
             required
             fullWidth
@@ -80,6 +88,7 @@ const Login = () => {
             onChange={(e) => setUserName(e.target.value)}
             value={userName}
             autoFocus
+            className={classes.input}
           />
           <Button
             type="submit"

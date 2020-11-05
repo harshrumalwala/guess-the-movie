@@ -138,7 +138,8 @@ const RoundSummary = ({
   setPenalty,
   penalty,
   prevRound,
-  hasAllCompletedRound
+  hasAllCompletedRound,
+  host
 }) => {
   const classes = useStyles();
   const [movie, setMovie] = useState('');
@@ -176,7 +177,7 @@ const RoundSummary = ({
 
   return (
     <div className={classes.root}>
-      <RoundHeader isSummary={true} round={round} />
+      <RoundHeader isSummary={true} round={round} host={host} />
       {isRoundActive(roundStartedAt, penalty, isGuessed) && (
         <div className={classes.guessMovie}>
           {!loading ? (

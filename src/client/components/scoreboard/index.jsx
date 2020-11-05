@@ -21,7 +21,7 @@ const useStyles = makeStyles({
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
-    backgroundColor: 'darkmagenta',
+    backgroundImage: 'linear-gradient(to top, #cc208e 0%, #6713d2 100%)',
     color: theme.palette.common.white
   },
   body: {

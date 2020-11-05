@@ -117,6 +117,7 @@ type Room {
   roundMovieId: Int
   roundCompleted: [User!]
   roundStartedAt: Date
+  createdAt: Date
   languages: [Language]
   movies: [Movie!]
 }

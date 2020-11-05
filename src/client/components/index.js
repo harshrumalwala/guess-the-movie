@@ -4,4 +4,6 @@ export { default as Scoreboard } from './scoreboard';
 export { default as RoundContainer } from './roundContainer'; 
 export { default as RoundSummary } from './roundSummary'; 
 export { default as RoundQuestion } from './roundQuestion'; 
-export { default as ListRooms } from './listRooms';
+export { default as RoomsList } from './roomsList';
+export { default as TabPanel } from './tabPanel';
+export { default as CreateRoom } from './createRoom';

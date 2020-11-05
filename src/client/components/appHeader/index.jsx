@@ -76,11 +76,6 @@ const AppHeader = () => {
     history.push('/');
   };
 
-  const handleProfile = () => {
-    setAnchorEl(null);
-    history.push('/profile');
-  };
-
   return (
     <div className={classes.root}>
       <StyledAppBar position="static">
@@ -118,7 +113,6 @@ const AppHeader = () => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleProfile}>Profile</MenuItem>
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
             </div>

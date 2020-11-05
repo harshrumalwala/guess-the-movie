@@ -1,5 +1,6 @@
 const { GraphQLServer, PubSub } = require('graphql-yoga');
 const { PrismaClient } = require('@prisma/client');
+const _ = require('lodash');
 const path = require('path');
 const express = require('express');
 const Query = require('./resolvers/query');
@@ -37,7 +38,9 @@ const server = new GraphQLServer({
 
 // if (server.express.get("env") === "production") {
 const buildPath = path.join(__dirname, '../../build');
-server.express.use(express.static(buildPath));
+_.forEach(['/', '/login', '/room/*'], (url) =>
+  server.express.use(url, express.static(buildPath))
+);
 // }
 
 server.start(options, () => {

@@ -31,7 +31,7 @@
     "subscriptions-transport-ws": "^0.9.18"
   },
   "scripts": {
-    "start": "node src/server",
+    "start": "prisma generate && node src/server",
     "start:dev": "concurrently \"npm run watch:server\" \"npm run start:web\"",
     "start:web": "react-scripts start",
     "watch:server": "nodemon --watch src/server src/server",

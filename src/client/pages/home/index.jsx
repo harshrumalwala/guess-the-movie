@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { makeStyles, withStyles, useTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
 import { useCurrentUser } from 'client/hooks';
 import { useHistory } from 'react-router-dom';
 import { RoomsList, TabPanel, CreateRoom } from 'client/components';
@@ -11,9 +11,6 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
 const useStyles = makeStyles((theme) => ({
-  container: {
-    width: '45%'
-  },
   root: {
     marginTop: theme.spacing(1),
     display: 'flex',
@@ -27,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     color: 'white'
   },
   tabPanel: {
-    width: '90%'
+    width: '100%'
   }
 }));
 
@@ -65,37 +62,39 @@ const Home = () => {
   };
 
   return (
-    <Container className={classes.container}>
+    <Grid container direction="row" justify="center" alignItems="center">
       <CssBaseline />
-      <div className={classes.root}>
-        <StyledAppBar position="static">
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            variant="fullWidth"
-            TabIndicatorProps={{
-              style: { background: 'deepskyblue' }
-            }}
+      <Grid item xs={11} sm={7} md={5} lg={5}>
+        <div className={classes.root}>
+          <StyledAppBar position="static">
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              variant="fullWidth"
+              TabIndicatorProps={{
+                style: { background: 'deepskyblue' }
+              }}
+            >
+              <Tab label="Join Room" {...tabProps(0)} />
+              <Tab label="Create Room" {...tabProps(1)} />
+            </Tabs>
+          </StyledAppBar>
+          <SwipeableViews
+            axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+            index={value}
+            onChangeIndex={handleChangeIndex}
+            className={classes.tabPanel}
           >
-            <Tab label="Join Room" {...tabProps(0)} />
-            <Tab label="Create Room" {...tabProps(1)} />
-          </Tabs>
-        </StyledAppBar>
-        <SwipeableViews
-          axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-          index={value}
-          onChangeIndex={handleChangeIndex}
-          className={classes.tabPanel}
-        >
-          <TabPanel value={value} index={0} dir={theme.direction}>
-            <RoomsList />
-          </TabPanel>
-          <TabPanel value={value} index={1} dir={theme.direction}>
-            <CreateRoom />
-          </TabPanel>
-        </SwipeableViews>
-      </div>
-    </Container>
+            <TabPanel value={value} index={0} dir={theme.direction}>
+              <RoomsList />
+            </TabPanel>
+            <TabPanel value={value} index={1} dir={theme.direction}>
+              <CreateRoom />
+            </TabPanel>
+          </SwipeableViews>
+        </div>
+      </Grid>
+    </Grid>
   );
 };
 

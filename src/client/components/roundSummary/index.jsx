@@ -18,12 +18,16 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    marginLeft: theme.spacing(1),
-    width: '20%',
+    height: '30vh',
+    [theme.breakpoints.up('md')]: {
+      height: '88vh'
+    },
+    margin: theme.spacing(1),
     backgroundImage: `url(${titanic})`,
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
-    backgroundSize: 'cover'
+    backgroundSize: 'cover',
+    overflow: 'auto'
   },
   guessMovie: {
     margin: theme.spacing(2),

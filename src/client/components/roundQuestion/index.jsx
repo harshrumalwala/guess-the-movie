@@ -31,6 +31,7 @@ import IconButton from '@material-ui/core/IconButton';
 import SendIcon from '@material-ui/icons/Send';
 import { useVerifyGuess } from 'client/hooks';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   questionFormControl: {
     marginTop: theme.spacing(2),
     marginLeft: theme.spacing(2),
-    minWidth: 250,
+    minWidth: 170,
     backgroundColor: 'white',
     boxShadow: '0 4px 8px 0 grey, 0 6px 20px 0 grey'
   },
@@ -296,7 +297,7 @@ const RoundQuestion = ({
   };
 
   return (
-    <div className={classes.root}>
+    <Grid container direction="row" justify="center" alignItems="center">
       <FormControl variant="filled" className={classes.questionFormControl}>
         <InputLabel id="question-label">
           Question {guessListSize + 1}
@@ -400,7 +401,7 @@ const RoundQuestion = ({
             className={classes.checkButton}
           />
         ))}
-    </div>
+    </Grid>
   );
 };
 

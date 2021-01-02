@@ -47,8 +47,6 @@ const RoundHeader = ({
   const { updateRoom } = useUpdateRoom();
   const { userId } = useCurrentUser();
 
-  console.log(userId, host);
-
   const onRoundRestart = (e) => {
     e.preventDefault();
     updateRoom({
@@ -87,14 +85,14 @@ const RoundHeader = ({
             {timeLeft > MAX_ROUND_TIME ? timeLeft - MAX_ROUND_TIME : timeLeft}
           </Typography>
         )}
-        {!isSummary && round === 0 && host?.id === userId && (
+        {!isSummary && round === 0 && host?.id === parseInt(userId) && (
           <Tooltip title="Start Game">
             <IconButton onClick={onGameStart}>
               <PlayArrowIcon style={{ color: 'white' }} />
             </IconButton>
           </Tooltip>
         )}
-        {isSummary && round !== 0 && host?.id === userId && (
+        {isSummary && round !== 0 && host?.id === parseInt(userId) && (
           <Tooltip title="Restart Game">
             <IconButton onClick={onRoundRestart}>
               <ReplayIcon style={{ color: 'white' }} />

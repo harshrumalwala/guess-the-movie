@@ -9,15 +9,20 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import birdsOfPrey from 'images/birdsOfPrey.jpg';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
+    height: '30vh',
+    [theme.breakpoints.up('md')]: {
+      height: '88vh'
+    },
+    margin: theme.spacing(1),
     backgroundImage: `url(${birdsOfPrey})`,
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
     backgroundSize: 'cover',
-    width: '20%'
+    overflow: 'auto'
   }
-});
+}));
 
 const StyledTableCell = withStyles((theme) => ({
   head: {

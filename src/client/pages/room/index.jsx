@@ -17,13 +17,20 @@ import {
   MAX_GUESSES
 } from 'client/constants';
 import { useHistory } from 'react-router-dom';
+import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    flexDirection: 'row',
-    margin: theme.spacing(1),
-    height: 'calc(100vh - 80px)'
+  roundContainer: {
+    order: 3,
+    [theme.breakpoints.up('md')]: {
+      order: 2
+    }
+  },
+  roundSummary: {
+    order: 2,
+    [theme.breakpoints.up('md')]: {
+      order: 3
+    }
   }
 }));
 
@@ -48,7 +55,7 @@ const Room = () => {
   const prevRound = usePrevious(watchRoom?.round);
   const prevRoundMovieId = usePrevious(watchRoom?.roundMovieId);
   const history = useHistory();
-  
+
   useEffect(() => {
     if (!token) {
       history.push('/login');
@@ -165,43 +172,56 @@ const Room = () => {
   }, [isRoundComplete]);
 
   return (
-    <div className={classes.root}>
-      <Scoreboard
-        players={watchRoom?.players}
-        roundCompleted={watchRoom?.roundCompleted}
-      />
-      <RoundContainer
-        round={watchRoom?.round}
-        roundMovieId={watchRoom?.roundMovieId}
-        roundLimit={watchRoom?.roundLimit}
-        roundCompleted={watchRoom?.roundCompleted}
-        roundStartedAt={watchRoom?.roundStartedAt}
-        setCurrentDetails={setCurrentDetails}
-        onRoundComplete={onRoundComplete}
-        guessList={guessList}
-        setGuessList={setGuessList}
-        timeLeft={timeLeft}
-        penalty={penalty}
-        displayMovieId={displayMovieId}
-        isGuessed={isGuessed}
-        hasAllCompletedRound={hasAllCompletedRound}
-        host={watchRoom?.host}
-      />
-      <RoundSummary
-        currentDetails={currentDetails}
-        roundMovieId={watchRoom?.roundMovieId}
-        onRoundComplete={onRoundComplete}
-        roundStartedAt={watchRoom?.roundStartedAt}
-        timeLeft={timeLeft}
-        round={watchRoom?.round}
-        prevRound={prevRound}
-        setPenalty={setPenalty}
-        penalty={penalty}
-        isGuessed={isGuessed}
-        hasAllCompletedRound={hasAllCompletedRound}
-        host={watchRoom?.host}
-      />
-    </div>
+    <Grid container direction="row">
+      <Grid item xs={6} sm={6} md={3} lg={3}>
+        <Scoreboard
+          players={watchRoom?.players}
+          roundCompleted={watchRoom?.roundCompleted}
+        />
+      </Grid>
+      <Grid
+        item
+        xs={12}
+        sm={12}
+        md={6}
+        lg={6}
+        className={classes.roundContainer}
+      >
+        <RoundContainer
+          round={watchRoom?.round}
+          roundMovieId={watchRoom?.roundMovieId}
+          roundLimit={watchRoom?.roundLimit}
+          roundCompleted={watchRoom?.roundCompleted}
+          roundStartedAt={watchRoom?.roundStartedAt}
+          setCurrentDetails={setCurrentDetails}
+          onRoundComplete={onRoundComplete}
+          guessList={guessList}
+          setGuessList={setGuessList}
+          timeLeft={timeLeft}
+          penalty={penalty}
+          displayMovieId={displayMovieId}
+          isGuessed={isGuessed}
+          hasAllCompletedRound={hasAllCompletedRound}
+          host={watchRoom?.host}
+        />
+      </Grid>
+      <Grid item xs={6} sm={6} md={3} lg={3} className={classes.roundSummary}>
+        <RoundSummary
+          currentDetails={currentDetails}
+          roundMovieId={watchRoom?.roundMovieId}
+          onRoundComplete={onRoundComplete}
+          roundStartedAt={watchRoom?.roundStartedAt}
+          timeLeft={timeLeft}
+          round={watchRoom?.round}
+          prevRound={prevRound}
+          setPenalty={setPenalty}
+          penalty={penalty}
+          isGuessed={isGuessed}
+          hasAllCompletedRound={hasAllCompletedRound}
+          host={watchRoom?.host}
+        />
+      </Grid>
+    </Grid>
   );
 };
 

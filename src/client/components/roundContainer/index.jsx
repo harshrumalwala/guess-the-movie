@@ -13,12 +13,16 @@ import { MAX_GUESSES, MAX_ROUND_TIME } from 'client/constants';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    marginLeft: theme.spacing(1),
+    margin: theme.spacing(1),
     flexGrow: 1,
     backgroundImage: `url(${movieTime})`,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
-    backgroundPosition: 'center'
+    backgroundPosition: 'center',
+    height: '56vh',
+    [theme.breakpoints.up('md')]: {
+      height: '88vh'
+    }
   },
   movieRoot: {
     display: 'flex',

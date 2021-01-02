@@ -18,7 +18,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    height: '30vh',
+    height: '40vh',
     [theme.breakpoints.up('md')]: {
       height: '88vh'
     },

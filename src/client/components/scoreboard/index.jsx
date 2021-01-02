@@ -11,7 +11,7 @@ import birdsOfPrey from 'images/birdsOfPrey.jpg';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    height: '30vh',
+    height: '40vh',
     [theme.breakpoints.up('md')]: {
       height: '88vh'
     },
@@ -61,7 +61,7 @@ const Scoreboard = ({ players, roundCompleted }) => {
   return (
     <div className={classes.root}>
       <TableContainer>
-        <Table stickyHeader>
+        <Table stickyHeader size="small">
           <TableHead>
             <StyledTableRow>
               <StyledTableCell>Rank</StyledTableCell>

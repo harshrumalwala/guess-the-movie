@@ -173,7 +173,7 @@ const Room = () => {
 
   return (
     <Grid container direction="row">
-      <Grid item xs={6} sm={6} md={3} lg={3}>
+      <Grid item xs={5} sm={6} md={3} lg={3}>
         <Scoreboard
           players={watchRoom?.players}
           roundCompleted={watchRoom?.roundCompleted}
@@ -205,7 +205,7 @@ const Room = () => {
           host={watchRoom?.host}
         />
       </Grid>
-      <Grid item xs={6} sm={6} md={3} lg={3} className={classes.roundSummary}>
+      <Grid item xs={7} sm={6} md={3} lg={3} className={classes.roundSummary}>
         <RoundSummary
           currentDetails={currentDetails}
           roundMovieId={watchRoom?.roundMovieId}

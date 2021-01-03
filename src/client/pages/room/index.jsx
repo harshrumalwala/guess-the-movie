@@ -146,25 +146,19 @@ const Room = () => {
   );
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(
-        calculateTimeLeft(watchRoom?.roundStartedAt, penalty, isGuessed)
-      );
-    }, 950);
+    const timer =
+      timeLeft > 0 &&
+      watchRoom?.round > 0 &&
+      setInterval(() => {
+        setTimeLeft(
+          calculateTimeLeft(watchRoom?.roundStartedAt, penalty, isGuessed)
+        );
+      }, 950);
     if (timeLeft <= 0 && !isRoundComplete) {
       setIsRoundComplete(true);
     }
     return () => clearInterval(timer);
-  }, [
-    timeLeft,
-    watchRoom,
-    setGuessList,
-    setCurrentDetails,
-    onRoundComplete,
-    isRoundComplete,
-    penalty,
-    isGuessed
-  ]);
+  }, [timeLeft, watchRoom, isRoundComplete, penalty, isGuessed]);
 
   useEffect(() => {
     isRoundComplete && !isGuessed && onRoundComplete(false);
@@ -173,7 +167,7 @@ const Room = () => {
 
   return (
     <Grid container direction="row">
-      <Grid item xs={5} sm={6} md={3} lg={3}>
+      <Grid item xs={5} sm={5} md={3} lg={3}>
         <Scoreboard
           players={watchRoom?.players}
           roundCompleted={watchRoom?.roundCompleted}
@@ -205,7 +199,7 @@ const Room = () => {
           host={watchRoom?.host}
         />
       </Grid>
-      <Grid item xs={7} sm={6} md={3} lg={3} className={classes.roundSummary}>
+      <Grid item xs={7} sm={7} md={3} lg={3} className={classes.roundSummary}>
         <RoundSummary
           currentDetails={currentDetails}
           roundMovieId={watchRoom?.roundMovieId}

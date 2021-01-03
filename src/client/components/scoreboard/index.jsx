@@ -61,7 +61,7 @@ const Scoreboard = ({ players, roundCompleted }) => {
   return (
     <div className={classes.root}>
       <TableContainer>
-        <Table stickyHeader size="small">
+        <Table stickyHeader>
           <TableHead>
             <StyledTableRow>
               <StyledTableCell>Rank</StyledTableCell>

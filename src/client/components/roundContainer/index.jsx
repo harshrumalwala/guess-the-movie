@@ -80,25 +80,27 @@ const RoundContainer = ({
       />
       {isRoundActive(roundStartedAt, penalty, isGuessed) &&
         _.size(guessList) < MAX_GUESSES && (
-          <RoundQuestion
-            guessListSize={_.size(guessList)}
-            currentDetails={currentDetails}
-            setCurrentDetails={setCurrentDetails}
-            setGuessList={setGuessList}
-            roundMovieId={roundMovieId}
-          />
-        )}
-      {((round !== 1 && timeLeft > MAX_ROUND_TIME) ||
-        (hasAllCompletedRound && round === roundLimit)) && (
-        <div className={classes.movieRoot}>
-          <Typography className={classes.movieCard} component="h3">
-            The movie was{' '}
-            <b>
-              <i>{data?.movie?.name}</i>
-            </b>
-          </Typography>
-        </div>
+        <RoundQuestion
+          guessListSize={_.size(guessList)}
+          currentDetails={currentDetails}
+          setCurrentDetails={setCurrentDetails}
+          setGuessList={setGuessList}
+          roundMovieId={roundMovieId}
+        />
       )}
+      {!_.isNil(round) &&
+        !_.isNil(roundLimit) &&
+        ((round > 1 && timeLeft > MAX_ROUND_TIME) ||
+          (hasAllCompletedRound && round === roundLimit)) && (
+          <div className={classes.movieRoot}>
+            <Typography className={classes.movieCard} component="h3">
+              The movie was{' '}
+              <b>
+                <i>{data?.movie?.name}</i>
+              </b>
+            </Typography>
+          </div>
+        )}
       <RoundList guessList={guessList} />
     </div>
   );

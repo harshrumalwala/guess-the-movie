@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import * as serviceWorker from './serviceWorker';
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { CurrentUserProvider } from 'client/hooks';
 import Routes from 'client/routes';
@@ -21,9 +21,9 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      Authorization: token ? `Bearer ${token}` : "",
+      Authorization: token ? `Bearer ${token}` : ''
     }
-  }
+  };
 });
 
 const httpLink = new HttpLink({
@@ -64,11 +64,11 @@ ReactDOM.render(
   <BrowserRouter>
     <ApolloProvider client={client}>
       <CurrentUserProvider>
-      <BackgroundSlider
-        images={BACKGROUND_IMAGES}
-        duration={10}
-        transition={2}
-      />
+        <BackgroundSlider
+          images={BACKGROUND_IMAGES}
+          duration={10}
+          transition={2}
+        />
         <AppHeader />
         <Routes />
       </CurrentUserProvider>
@@ -79,6 +79,5 @@ ReactDOM.render(
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
-if (module.hot) module.hot.accept();
+// Learn more about service workers: https://cra.link/PWA
+serviceWorkerRegistration.register();

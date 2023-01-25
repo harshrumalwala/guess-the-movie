@@ -38,9 +38,7 @@ const server = new GraphQLServer({
 
 // if (server.express.get("env") === "production") {
 const buildPath = path.join(__dirname, '../../build');
-console.log('buildPath -- ', buildPath, ' --- ', __dirname);
 _.forEach(['/', '/login', '/room/*'], (url) => {
-  console.log('url', url);
   server.express.use(url, express.static(buildPath));
 });
 // }
